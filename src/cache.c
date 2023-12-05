@@ -9,8 +9,9 @@ int cache_search(const char *name) {
 
 	int i;
 
-	for (i=0; i<MAX_FUNCS && cache[i].name; i++) {                                               if (strcmp(cache[i].name, name) == 0)
-		return i;
+	for (i=0; i<MAX_FUNCS && cache[i].name; i++) {
+		if (strcmp(cache[i].name, name) == 0)
+			return i;
 	}
 
 	return -1;

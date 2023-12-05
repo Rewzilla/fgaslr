@@ -99,7 +99,8 @@ unsigned int resolve_symbol(Elf64_Sym *symbol_table, unsigned int symbol_table_s
 
 void fgaslr_resolve(struct func *funcs) {
 
-	unsigned int i, c, si, ri, mi;
+	int c;
+	unsigned int i, si, ri, mi;
 	unsigned int function_id, library_id;
 	const char *function_str, *library_str;
 	char *filename;
@@ -120,6 +121,10 @@ void fgaslr_resolve(struct func *funcs) {
 	struct mapping *mapping, *my_mappings;
 	unsigned int my_num_mappings;
 	struct func *next_funcs;
+
+	const char *valid_sections[] = {
+		".lot", ".text", ".data", ".bss", ".rodata", ".rodata.str1.1", ".rodata.cst8"
+	};
 
 	for (i=0; GET_FUNCID(funcs[i].id) != FUNC_END; i++) {
 
@@ -180,6 +185,9 @@ void fgaslr_resolve(struct func *funcs) {
 
 //				debug("Found section '%s' at offset %08x\n", section_name, section_offset);
 
+				if (section_size == 0)
+					continue;
+
 				add_mapping(section_name, NULL, si, section_offset, section_size);
 
 				if (section_type == SHT_SYMTAB) {
@@ -199,19 +207,14 @@ void fgaslr_resolve(struct func *funcs) {
 
 			addr = generate_random_address();
 
-			const char *to_map[] = {
-				".lot", ".text", ".data", ".bss", ".rodata", ".rodata.str1.1", ".rodata.cst8"
-			};
+			for (mi=0; mi<(sizeof(valid_sections)/sizeof(char *)); mi++) {
 
-			for (mi=0; mi<(sizeof(to_map)/sizeof(char *)); mi++) {
-
-				mapping = get_mapping_by_name(to_map[mi]);
+				mapping = get_mapping_by_name(valid_sections[mi]);
 
 				if (mapping == NULL)
 					continue;
 
 				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
-				debug("memcpy(%p, %p, %u\n", mapping->addr, object + mapping->offset, mapping->size);
 				memcpy(mapping->addr, object + mapping->offset, mapping->size);
 				addr += MALIGN(mapping->size);
 				debug("section '%s' mapped at %p\n", mapping->name, mapping->addr);
@@ -313,7 +316,20 @@ void fgaslr_resolve(struct func *funcs) {
 			symbol_offset = resolve_symbol(symbol_table, symbol_table_size, string_table, function_str);
 
 			debug("Found symbol '%s' at offset %08x\n", function_str, symbol_offset);
-			funcs[i].addr = get_mapping_by_name(".text")->addr + symbol_offset;
+
+			// Search for the first valid section that was mapped, and assume the symbol is
+			// a part of that mapping.  This is honestly pretty sketchy, might not work
+			// in all cases, but seems to be stable for now.
+			for (mi=1; mi<(sizeof(valid_sections)/sizeof(char *)); mi++) {
+
+				mapping = get_mapping_by_name(valid_sections[mi]);
+				if (mapping == NULL)
+					continue;
+
+				funcs[i].addr = mapping->addr + symbol_offset;
+				break;
+
+			}
 
 			debug("Adding %s:%p to the cache\n", function_str, funcs[i].addr);
 			cache_add(function_str, funcs[i].addr);
@@ -336,16 +352,20 @@ void fgaslr_resolve(struct func *funcs) {
 			debug("Finished recursively resolving functions in '%s'\n", function_str);
 
 			mapping = get_mapping_by_name(".lot");
-			mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ);
+			if (mapping != NULL)
+				mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ);
 
 			mapping = get_mapping_by_name(".text");
-			mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ|PROT_EXEC);
+			if (mapping != NULL)
+				mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ|PROT_EXEC);
 
 			mapping = get_mapping_by_name(".data");
-			mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE);
+			if (mapping != NULL)
+				mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE);
 
 			mapping = get_mapping_by_name(".bss");
-			mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE);
+			if (mapping != NULL)
+				mprotect(mapping->addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE);
 
 			mapping = get_mapping_by_name(".rodata");
 			if (mapping != NULL)
