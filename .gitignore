@@ -1,0 +1,7 @@
+
+toy/*.bin
+toy/*.o
+
+md5sum/*.bin
+md5sum/*.o
+

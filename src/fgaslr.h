@@ -1,0 +1,37 @@
+#ifndef FGASLR_H
+#define FGASLR_H
+
+#include <stdio.h>
+
+#include "fgaslr_funcid.h"
+#include "fgaslr_libid.h"
+
+#define FGASLR_ADDR_MIN 0x10000000000
+#define FGASLR_ADDR_MAX 0xffffffff000
+#define FGASLR_RAND_SEED time(0)
+
+struct func {
+	enum funcid id;
+	long int (*addr)();
+};
+
+#ifdef DEBUG
+#define debug(...) printf("\e[31m[debug]\e[0m " __VA_ARGS__)
+#else
+#define debug(...)
+#endif
+
+#define ASM_ALIGN_STACK() __asm__("mov %rsp, %r15; and $0x0f, %r15; sub %r15, %rsp;")
+#define ASM_BREAKPOINT() __asm__("int3")
+#define ASM_EXIT() __asm__("mov $60, %rax; mov $0, %rdi; syscall;")
+
+#define FGASLR_ENTRY(l, f) ((l << 16) | f)
+#define GET_LIBID(s) ((s >> 16) & 0xffff)
+#define GET_FUNCID(s) (s & 0xffff)
+
+#define MALIGN(x) (x + (0x1000 - (x % 0x1000)))
+
+void init();
+void fgaslr_resolve(struct func *funcs);
+
+#endif
