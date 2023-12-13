@@ -15,7 +15,7 @@ struct func {
 	long int (*addr)();
 };
 
-#define debug(...) if (getenv("DEBUG")) printf("\e[31m[debug]\e[0m " __VA_ARGS__)
+#define fgaslr_debug(...) if (getenv("DEBUG")) printf("\e[31m[debug]\e[0m " __VA_ARGS__)
 
 #define ASM_ALIGN_STACK() __asm__("mov %rsp, %r15; and $0x0f, %r15; sub %r15, %rsp;")
 #define ASM_BREAKPOINT() __asm__("int3")

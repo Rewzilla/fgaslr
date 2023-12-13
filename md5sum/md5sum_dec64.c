@@ -14,9 +14,9 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define FGASLR_INIT64() ((void (*)())funcs[0].addr)()
-#define FGASLR_T64D (((uchar *)funcs[1].addr))
-#define FGASLR_T64E (((char *)funcs[2].addr))
+#define init64() ((void (*)())funcs[0].addr)()
+#define t64d (((uchar *)funcs[1].addr))
+#define t64e (((char *)funcs[2].addr))
 
 int
 dec64(uchar *out, char *in, int n)
@@ -25,13 +25,13 @@ dec64(uchar *out, char *in, int n)
 	uchar *start = out;
 	int i, c;
 
-	if(FGASLR_T64E[0] == 0)
-		FGASLR_INIT64();
+	if(t64e[0] == 0)
+		init64();
 
 	b24 = 0;
 	i = 0;
 	while(n-- > 0){
-		c = FGASLR_T64D[*in++];
+		c = t64d[*in++];
 		if(c == 255)
 			continue;
 		switch(i){

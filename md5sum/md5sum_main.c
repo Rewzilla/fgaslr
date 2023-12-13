@@ -19,15 +19,17 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define FGASLR_SUM(a, b) ((void (*)(FILE *,char *))funcs[0].addr)(a, b)
-#define FGASLR_HEX (*(int *)funcs[1].addr)
-#define FGASLR_DEBUG (*((int *)funcs[2].addr))
-#define FGASLR_STRCMP(a, b) ((int (*)(const char *,const char *))funcs[3].addr)(a, b)
-#define FGASLR_FOPEN(a, b) ((FILE * (*)(const char *,const char *))funcs[4].addr)(a, b)
-#define FGASLR_FCLOSE(a) ((int (*)(FILE *))funcs[5].addr)(a)
-#define FGASLR_FPRINTF(a, ...) ((int (*)(FILE *,const char *,...))funcs[6].addr)(a, __VA_ARGS__)
-#define FGASLR_STDIN (*(FILE **)funcs[7].addr)
-#define FGASLR_STDERR (*(FILE **)funcs[8].addr)
+#undef stdin
+#undef stderr
+#define sum(a, b) ((void (*)(FILE *,char *))funcs[0].addr)(a, b)
+#define hex (*(int *)funcs[1].addr)
+#define debug (*((int *)funcs[2].addr))
+#define strcmp(a, b) ((int (*)(const char *,const char *))funcs[3].addr)(a, b)
+#define fopen(a, b) ((FILE * (*)(const char *,const char *))funcs[4].addr)(a, b)
+#define fclose(a) ((int (*)(FILE *))funcs[5].addr)(a)
+#define fprintf(a, ...) ((int (*)(FILE *,const char *,...))funcs[6].addr)(a, __VA_ARGS__)
+#define stdin (*(FILE **)funcs[7].addr)
+#define stderr (*(FILE **)funcs[8].addr)
 
 int
 main(int argc, char **argv)
@@ -35,25 +37,25 @@ main(int argc, char **argv)
 	int c;
 	FILE *fd;
 	argv++; argc--;
-	if(argc>0 && FGASLR_STRCMP(argv[0],"-d")==0){
-		FGASLR_DEBUG++;
+	if(argc>0 && strcmp(argv[0],"-d")==0){
+		debug++;
 		argv++; argc--;
 	}
 
-	if(argc>0 && FGASLR_STRCMP(argv[0],"-x")==0){
-		FGASLR_HEX++;
+	if(argc>0 && strcmp(argv[0],"-x")==0){
+		hex++;
 		argv++; argc--;
 	}
 
 	if(argc == 0)
-		FGASLR_SUM(FGASLR_STDIN,0);
+		sum(stdin,0);
 	else for(c = 0; c < argc; c++){
-		fd = FGASLR_FOPEN(argv[c],"r");
+		fd = fopen(argv[c],"r");
 		if(fd==NULL){
-			FGASLR_FPRINTF(FGASLR_STDERR, "md5sum: can't open %s\n", argv[c]);
+			fprintf(stderr, "md5sum: can't open %s\n", argv[c]);
 			continue;
 		}
-		FGASLR_SUM(fd, argv[c]);
-		FGASLR_FCLOSE(fd);
+		sum(fd, argv[c]);
+		fclose(fd);
 	}
 }

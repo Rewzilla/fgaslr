@@ -30,19 +30,19 @@ void *resolve_in_library(const char *function_str, const char *library_str) {
 	h = dlopen(library_str, RTLD_LAZY);
 
 	if (h == NULL) {
-		debug("Error loading shared library '%s': %s\n", library_str, dlerror());
+		fgaslr_debug("Error loading shared library '%s': %s\n", library_str, dlerror());
 		exit(-1);
 	} else {
-		debug("Opened shared library '%s' to resolve '%s'\n", library_str, function_str);
+		fgaslr_debug("Opened shared library '%s' to resolve '%s'\n", library_str, function_str);
 	}
 
 	addr = dlsym(h, function_str);
 
 	if (addr == NULL) {
-		debug("Error locating '%s' in shared library '%s': %s\n", function_str, library_str, dlerror());
+		fgaslr_debug("Error locating '%s' in shared library '%s': %s\n", function_str, library_str, dlerror());
 		exit(-1);
 	} else {
-		debug("Resolved '%s' to %p in '%s'\n", function_str, addr, library_str);
+		fgaslr_debug("Resolved '%s' to %p in '%s'\n", function_str, addr, library_str);
 	}
 
 	dlclose(h);
@@ -137,14 +137,14 @@ void fgaslr_resolve(struct func *funcs) {
 
 		if (c > -1) {
 
-			debug("'%s' already resolved\n", function_str);
+			fgaslr_debug("'%s' already resolved\n", function_str);
 			funcs[i].addr = cache[c].addr;
 
 			continue;
 
 		}
 
-		debug("Resolving '%s'\n", function_str);
+		fgaslr_debug("Resolving '%s'\n", function_str);
 
 		if (library_id == LIB_LIBC) {
 
@@ -160,14 +160,14 @@ void fgaslr_resolve(struct func *funcs) {
 			fd = open(filename, O_RDONLY);
 
 			if (fd < 0) {
-				debug("Failed to open '%s'\n", filename);
+				fgaslr_debug("Failed to open '%s'\n", filename);
 				exit(-1);
 			}
 
 			object = mmap(NULL, MALIGN(filesize), PROT_READ, MAP_PRIVATE, fd, 0);
 
 			if (object < 0) {
-				debug("Failed to map '%s'\n", filename);
+				fgaslr_debug("Failed to map '%s'\n", filename);
 				exit(-1);
 			}
 
@@ -183,7 +183,7 @@ void fgaslr_resolve(struct func *funcs) {
 				section_size = section_headers[si].sh_size;
 				section_type = section_headers[si].sh_type;
 
-//				debug("Found section '%s' at offset %08x\n", section_name, section_offset);
+//				fgaslr_debug("Found section '%s' at offset %08x\n", section_name, section_offset);
 
 				if (section_size == 0)
 					continue;
@@ -217,14 +217,14 @@ void fgaslr_resolve(struct func *funcs) {
 				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
 				memcpy(mapping->addr, object + mapping->offset, mapping->size);
 				addr += MALIGN(mapping->size);
-				debug("section '%s' mapped at %p\n", mapping->name, mapping->addr);
+				fgaslr_debug("section '%s' mapped at %p\n", mapping->name, mapping->addr);
 
 			}
 
 			funcs_table_offset = resolve_symbol(symbol_table, symbol_table_size, string_table, "funcs");
-			debug("'funcs' offset is %x\n", funcs_table_offset);
+			fgaslr_debug("'funcs' offset is %x\n", funcs_table_offset);
 
-			debug("configuring fake GOT pointer for '%s'\n", function_str);
+			fgaslr_debug("configuring fake GOT pointer for '%s'\n", function_str);
 			mapping = get_mapping_by_name(".lot");
 			*(long int *)(mapping->addr) = (long int)mapping->addr + funcs_table_offset;
 
@@ -243,7 +243,7 @@ void fgaslr_resolve(struct func *funcs) {
 
 				num_relocations = section_size / sizeof(Elf64_Rela);
 
-				debug("Processing %u relocations for '%s'\n", num_relocations, function_str);
+				fgaslr_debug("Processing %u relocations for '%s'\n", num_relocations, function_str);
 
 				for (ri=0; ri<num_relocations; ri++) {
 
@@ -252,7 +252,7 @@ void fgaslr_resolve(struct func *funcs) {
 					relocation_type = relocation->r_info & 0xffffffff;
 					relocation_address = get_mapping_by_name(".text")->addr + relocation->r_offset;
 
-					debug("Relocation entry %d: offset=%lx, info=%lx, type=%x, addend=%ld\n", ri, relocation->r_offset, relocation->r_info, relocation_type, relocation->r_addend);
+					fgaslr_debug("Relocation entry %d: offset=%lx, info=%lx, type=%x, addend=%ld\n", ri, relocation->r_offset, relocation->r_info, relocation_type, relocation->r_addend);
 
 					switch (relocation_type) {
 
@@ -264,7 +264,7 @@ void fgaslr_resolve(struct func *funcs) {
 							- 4;
 
 						*(unsigned int *)relocation_address = (unsigned int)relocation_value;
-						debug("R_X86_64_REX_GOTPCRELX: %p -> %08x\n", (void *)relocation_address, relocation_value);
+						fgaslr_debug("R_X86_64_REX_GOTPCRELX: %p -> %08x\n", (void *)relocation_address, relocation_value);
 
 						break;
 
@@ -299,12 +299,12 @@ void fgaslr_resolve(struct func *funcs) {
 							+ relocation->r_addend;
 
 						*(unsigned int *)relocation_address = (unsigned int)relocation_value;
-						debug("R_X86_64_PC32: %p -> %08x\n", (void *)relocation_address, relocation_value);
+						fgaslr_debug("R_X86_64_PC32: %p -> %08x\n", (void *)relocation_address, relocation_value);
 
 						break;
 
 					default:
-						debug("Unknown relocation type: %u\n", relocation_type);
+						fgaslr_debug("Unknown relocation type: %u\n", relocation_type);
 
 					}
 
@@ -312,10 +312,10 @@ void fgaslr_resolve(struct func *funcs) {
 
 			}
 
-			debug("Locating symbol '%s'\n", function_str);
+			fgaslr_debug("Locating symbol '%s'\n", function_str);
 			symbol_offset = resolve_symbol(symbol_table, symbol_table_size, string_table, function_str);
 
-			debug("Found symbol '%s' at offset %08x\n", function_str, symbol_offset);
+			fgaslr_debug("Found symbol '%s' at offset %08x\n", function_str, symbol_offset);
 
 			// Search for the first valid section that was mapped, and assume the symbol is
 			// a part of that mapping.  This is honestly pretty sketchy, might not work
@@ -331,10 +331,10 @@ void fgaslr_resolve(struct func *funcs) {
 
 			}
 
-			debug("Adding %s:%p to the cache\n", function_str, funcs[i].addr);
+			fgaslr_debug("Adding %s:%p to the cache\n", function_str, funcs[i].addr);
 			cache_add(function_str, funcs[i].addr);
 
-			debug("Recursively resolving functions in '%s'\n", function_str);
+			fgaslr_debug("Recursively resolving functions in '%s'\n", function_str);
 
 			next_funcs = (struct func *)(get_mapping_by_name(".lot")->addr + funcs_table_offset);
 
@@ -349,7 +349,7 @@ void fgaslr_resolve(struct func *funcs) {
 			mappings = my_mappings;
 			num_mappings = my_num_mappings;
 
-			debug("Finished recursively resolving functions in '%s'\n", function_str);
+			fgaslr_debug("Finished recursively resolving functions in '%s'\n", function_str);
 
 			mapping = get_mapping_by_name(".lot");
 			if (mapping != NULL)
@@ -378,7 +378,7 @@ void fgaslr_resolve(struct func *funcs) {
 
 		} else {
 
-			debug("Unknown library '%s' (%u)\n", library_str, library_id);
+			fgaslr_debug("Unknown library '%s' (%u)\n", library_str, library_id);
 
 		}
 

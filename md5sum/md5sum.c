@@ -9,7 +9,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define FGASLR_MAIN(a, b) ((int (*)(int, char *[]))funcs[0].addr)(a, b)
+#define _main(a, b) ((int (*)(int, char *[]))funcs[0].addr)(a, b)
 
 int main(int argc, char *argv[]) {
 
@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
 
 //	ASM_BREAKPOINT();
 
-	FGASLR_MAIN(argc, argv);
+	_main(argc, argv);
 
-	ASM_EXIT();
+//	ASM_EXIT();
 
 }

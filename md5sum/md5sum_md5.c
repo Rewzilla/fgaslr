@@ -18,13 +18,13 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define FGASLR_ENCODE(a, b, c) ((void (*)(byte *, uint *,uint))funcs[0].addr)(a, b, c)
-#define FGASLR_DECODE(a, b, c) ((void (*)(uint *, byte *,uint))funcs[1].addr)(a, b, c)
-#define FGASLR_TAB ((Table *)funcs[2].addr)
-#define FGASLR_NIL (*(MD5state **)funcs[3].addr)
-#define FGASLR_CALLOC(a, b) ((void * (*)(size_t,size_t))funcs[4].addr)(a, b)
-#define FGASLR_FREE(a) ((void (*)(void *))funcs[5].addr)(a)
-#define FGASLR_MEMSET(a, b, c) ((void * (*)(void *,int,size_t))funcs[6].addr)(a, b, c)
+#define encode(a, b, c) ((void (*)(byte *, uint *,uint))funcs[0].addr)(a, b, c)
+#define decode(a, b, c) ((void (*)(uint *, byte *,uint))funcs[1].addr)(a, b, c)
+#define tab ((Table *)funcs[2].addr)
+#define nil (*(MD5state **)funcs[3].addr)
+#define calloc(a, b) ((void * (*)(size_t,size_t))funcs[4].addr)(a, b)
+#define free(a) ((void (*)(void *))funcs[5].addr)(a)
+#define memset(a, b, c) ((void * (*)(void *,int,size_t))funcs[6].addr)(a, b, c)
 
 /*
  *  I require len to be a multiple of 64 for all but
@@ -39,10 +39,10 @@ md5(byte *p, uint len, byte *digest, MD5state *s)
 	byte *end;
 	uint x[16];
 
-	if(s == FGASLR_NIL){
-		s = FGASLR_CALLOC(sizeof(*s),1);
-		if(s == FGASLR_NIL)
-			return FGASLR_NIL;
+	if(s == nil){
+		s = calloc(sizeof(*s),1);
+		if(s == nil)
+			return nil;
 
 		/* seed the state, these constants would look nicer big-endian */
 		s->state[0] = 0x67452301;
@@ -62,7 +62,7 @@ md5(byte *p, uint len, byte *digest, MD5state *s)
 		else
 			i = 120 - i;
 		if(i > 0){
-			FGASLR_MEMSET(p + len, 0, i);
+			memset(p + len, 0, i);
 			p[len] = 0x80;
 		}
 		len += i;
@@ -70,7 +70,7 @@ md5(byte *p, uint len, byte *digest, MD5state *s)
 		/* append the count */
 		x[0] = s->len<<3;
 		x[1] = s->len>>29;
-		FGASLR_ENCODE(p+len, x, 8);
+		encode(p+len, x, 8);
 	} else
 		done = 0;
 
@@ -80,10 +80,10 @@ md5(byte *p, uint len, byte *digest, MD5state *s)
 		c = s->state[2];
 		d = s->state[3];
 
-		FGASLR_DECODE(x, p, 64);
+		decode(x, p, 64);
 
 		for(i = 0; i < 64; i++){
-			t = FGASLR_TAB + i;
+			t = tab + i;
 			switch(i>>4){
 			case 0:
 				a += (b & c) | (~b & d);
@@ -118,9 +118,9 @@ md5(byte *p, uint len, byte *digest, MD5state *s)
 
 	/* return result */
 	if(done){
-		FGASLR_ENCODE(digest, s->state, 16);
-		FGASLR_FREE(s);
-		return FGASLR_NIL;
+		encode(digest, s->state, 16);
+		free(s);
+		return nil;
 	}
 	return s;
 }

@@ -14,32 +14,32 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define FGASLR_T64D ((uchar *)funcs[0].addr)
-#define FGASLR_T64E ((uchar *)funcs[1].addr)
-#define FGASLR_MEMSET(a, b, c) ((void * (*)(void *,int, size_t))funcs[2].addr)(a, b, c)
+#define t64d ((uchar *)funcs[0].addr)
+#define t64e ((uchar *)funcs[1].addr)
+#define memset(a, b, c) ((void * (*)(void *,int, size_t))funcs[2].addr)(a, b, c)
 
 static void
 init64(void)
 {
 	int c, i;
 
-	FGASLR_MEMSET(FGASLR_T64D, 255, 256);
-	FGASLR_MEMSET(FGASLR_T64E, '=', 64);
+	memset(t64d, 255, 256);
+	memset(t64e, '=', 64);
 	i = 0;
 	for(c = 'A'; c <= 'Z'; c++){
-		FGASLR_T64E[i] = c;
-		FGASLR_T64D[c] = i++;
+		t64e[i] = c;
+		t64d[c] = i++;
 	}
 	for(c = 'a'; c <= 'z'; c++){
-		FGASLR_T64E[i] = c;
-		FGASLR_T64D[c] = i++;
+		t64e[i] = c;
+		t64d[c] = i++;
 	}
 	for(c = '0'; c <= '9'; c++){
-		FGASLR_T64E[i] = c;
-		FGASLR_T64D[c] = i++;
+		t64e[i] = c;
+		t64d[c] = i++;
 	}
-	FGASLR_T64E[i] = '+';
-	FGASLR_T64D['+'] = i++;
-	FGASLR_T64E[i] = '/';
-	FGASLR_T64D['/'] = i;
+	t64e[i] = '+';
+	t64d['+'] = i++;
+	t64e[i] = '/';
+	t64d['/'] = i;
 }

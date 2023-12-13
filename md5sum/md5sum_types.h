@@ -3,8 +3,6 @@
 
 #define PROGNAME "md5sum"
 
-#include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 
 typedef unsigned int uint;
