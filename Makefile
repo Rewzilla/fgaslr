@@ -2,7 +2,7 @@
 export CC		:= gcc
 export CFLAGS	:= -fPIC -fno-jump-tables -Wall
 
-.PHONY: all toy md5sum clean
+.PHONY: all toy md5sum nc clean
 
 help:
 	@echo "Usage:"
@@ -16,6 +16,10 @@ toy:		## Build toy program
 md5sum:		## Build md5sum program
 	$(MAKE) -C md5sum
 
+nc:			## Build nc program
+	$(MAKE) -C nc
+
 clean:		## Clean up all build files
 	$(MAKE) -C toy clean
 	$(MAKE) -C md5sum clean
+	$(MAKE)	-C nc clean

@@ -7,3 +7,5 @@ toy/*.o
 md5sum/*.bin
 md5sum/*.o
 
+nc/*.bin
+nc/*.o
