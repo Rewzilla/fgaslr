@@ -12,7 +12,6 @@ all:
 	$(CC) $(CFLAGS) -c -o nc_unknown.o nc_unknown.c
 	$(CC) $(CFLAGS) -c -o nc_p_tcp.o nc_p_tcp.c
 	$(CC) $(CFLAGS) -c -o nc_p_udp.o nc_p_udp.c
-	$(CC) $(CFLAGS) -c -o nc_h_errno.o nc_h_errno.c
 	$(CC) $(CFLAGS) -c -o nc_h_errs.o nc_h_errs.c
 	$(CC) $(CFLAGS) -c -o nc_gatesidx.o nc_gatesidx.c
 	$(CC) $(CFLAGS) -c -o nc_gatesptr.o nc_gatesptr.c
