@@ -121,6 +121,7 @@ enum funcid {
 	FUNC_OPTARG,
 	FUNC_OPTIND,
 	FUNC_OPTOPT,
+	FUNC_SRAND,
 
 	FUNC_END = 0xffff,
 

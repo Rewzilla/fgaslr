@@ -37,6 +37,7 @@ void holler (str, p1, p2, p3, p4, p5, p6)
   char * str;
   char * p1, * p2, * p3, * p4, * p5, * p6;
 {
+ASM_ALIGN_STACK();
   if (o_verbose) {
     fprintf (stderr, str, p1, p2, p3, p4, p5, p6);
 #ifdef HAVE_BIND

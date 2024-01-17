@@ -121,6 +121,7 @@ const char *funcstr[] = {
 	"optarg",
 	"optind",
 	"optopt",
+	"srand",
 
 	"(end)",
 
