@@ -1,4 +1,6 @@
 
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -113,7 +115,7 @@ void fgaslr_resolve(struct func *funcs) {
 	unsigned int function_id, library_id;
 	const char *function_str, *library_str;
 	char *filename;
-	int filesize, fd;
+	int filesize, fd, memfd;
 	struct stat st;
 	void *object, *addr;
 	Elf64_Ehdr *elf_header;
@@ -130,6 +132,7 @@ void fgaslr_resolve(struct func *funcs) {
 	struct mapping *mapping, *my_mappings;
 	unsigned int my_num_mappings;
 	struct func *next_funcs;
+	char *map_name;
 
 	const char *valid_sections[] = {
 		".lot", ".text", ".data", ".bss", ".rodata", ".rodata.str1.1", ".rodata.cst8"
@@ -211,9 +214,6 @@ void fgaslr_resolve(struct func *funcs) {
 
 			}
 
-			// TODO: It might be better to mmap these directly to the file, so the name
-			// shows up correctly in /proc/self/maps.
-
 			addr = generate_random_address();
 
 			for (mi=0; mi<(sizeof(valid_sections)/sizeof(char *)); mi++) {
@@ -223,10 +223,20 @@ void fgaslr_resolve(struct func *funcs) {
 				if (mapping == NULL)
 					continue;
 
-				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
+				// TODO: This probably isn't the greatest, since each mapping will have a
+				// shadow copy in kernel space.  That said, this ensures each userspace
+				// mapping has a name in /proc/self/maps, which is really helpful for debugging
+				map_name = malloc(strlen(function_str) + 1 + strlen(mapping->name) + 1);
+				sprintf(map_name, "%s_%s\n", function_str, mapping->name);
+				memfd = memfd_create(map_name, 0);
+				ftruncate(memfd, MALIGN(mapping->size));
+
+				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
 				memcpy(mapping->addr, object + mapping->offset, mapping->size);
 				addr += MALIGN(mapping->size);
 				fgaslr_debug("section '%s' mapped at %p\n", mapping->name, mapping->addr);
+
+				free(map_name);
 
 			}
 
