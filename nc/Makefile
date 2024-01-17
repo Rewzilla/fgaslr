@@ -16,7 +16,7 @@ all:
 	$(CC) $(CFLAGS) -c -o nc_h_errs.o nc_h_errs.c
 	$(CC) $(CFLAGS) -c -o nc_gatesidx.o nc_gatesidx.c
 	$(CC) $(CFLAGS) -c -o nc_gatesptr.o nc_gatesptr.c
-	$(CC) $(CFLAGS) -c -o nc_single.o nc_single.c
+	$(CC) $(CFLAGS) -c -o nc_Single.o nc_Single.c
 	$(CC) $(CFLAGS) -c -o nc_insaved.o nc_insaved.c
 	$(CC) $(CFLAGS) -c -o nc_wrote_out.o nc_wrote_out.c
 	$(CC) $(CFLAGS) -c -o nc_wrote_net.o nc_wrote_net.c
@@ -33,7 +33,7 @@ all:
 	$(CC) $(CFLAGS) -c -o nc_ding1.o nc_ding1.c
 	$(CC) $(CFLAGS) -c -o nc_ding2.o nc_ding2.c
 	$(CC) $(CFLAGS) -c -o nc_portpoop.o nc_portpoop.c
-	$(CC) $(CFLAGS) -c -o nc_stage.o nc_stage.c
+	$(CC) $(CFLAGS) -c -o nc_Stage.o nc_Stage.c
 	$(CC) $(CFLAGS) -c -o nc_o_alla.o nc_o_alla.c
 	$(CC) $(CFLAGS) -c -o nc_o_interval.o nc_o_interval.c
 	$(CC) $(CFLAGS) -c -o nc_o_listen.o nc_o_listen.c
@@ -50,7 +50,7 @@ all:
 	$(CC) $(CFLAGS) -c -o nc_catch.o nc_catch.c
 	$(CC) $(CFLAGS) -c -o nc_tmtravel.o nc_tmtravel.c
 	$(CC) $(CFLAGS) -c -o nc_arm.o nc_arm.c
-	$(CC) $(CFLAGS) -c -o nc_hmalloc.o nc_hmalloc.c
+	$(CC) $(CFLAGS) -c -o nc_Hmalloc.o nc_Hmalloc.c
 	$(CC) $(CFLAGS) -c -o nc_findline.o nc_findline.c
 	$(CC) $(CFLAGS) -c -o nc_comparehosts.o nc_comparehosts.c
 	$(CC) $(CFLAGS) -c -o nc_gethostpoop.o nc_gethostpoop.c
