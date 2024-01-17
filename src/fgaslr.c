@@ -227,7 +227,7 @@ void fgaslr_resolve(struct func *funcs) {
 				// shadow copy in kernel space.  That said, this ensures each userspace
 				// mapping has a name in /proc/self/maps, which is really helpful for debugging
 				map_name = malloc(strlen(function_str) + 1 + strlen(mapping->name) + 1);
-				sprintf(map_name, "%s_%s\n", function_str, mapping->name);
+				sprintf(map_name, "%s_%s", function_str, mapping->name);
 				memfd = memfd_create(map_name, 0);
 				ftruncate(memfd, MALIGN(mapping->size));
 
