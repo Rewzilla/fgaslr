@@ -231,7 +231,7 @@ void fgaslr_resolve(struct func *funcs) {
 				memfd = memfd_create(map_name, 0);
 				ftruncate(memfd, MALIGN(mapping->size));
 
-				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
+				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE, memfd, 0);
 				memcpy(mapping->addr, object + mapping->offset, mapping->size);
 				addr += MALIGN(mapping->size);
 				fgaslr_debug("section '%s' mapped at %p\n", mapping->name, mapping->addr);
