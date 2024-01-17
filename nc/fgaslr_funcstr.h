@@ -118,6 +118,9 @@ const char *funcstr[] = {
 	"time",
 	"write",
 	"__h_errno_location",
+	"optarg",
+	"optind",
+	"optopt",
 
 	"(end)",
 

@@ -3,6 +3,7 @@
 #include <time.h>
 #include <resolv.h>
 typedef void (*sighandler_t)(int);
+#define HAVE_GETOPT
 
 /* Netcat 1.10 RELEASE 960320
 
