@@ -11,7 +11,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_WRITE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_BIGBUF_IN), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_HOLLER), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_WAIT), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_SLEEP), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_UDPMODE), NULL},
@@ -23,7 +23,7 @@ struct func funcs[] = {
 #define write(a,b,c) ((ssize_t (*)(int,const void *,size_t))funcs[0].addr)(a,b,c)
 #define bigbuf_in (*(char **)funcs[1].addr)
 #define holler(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
-#define errno (*(int *)funcs[3].addr)
+#define __errno_location() ((int *(*)())funcs[3].addr)()
 #define o_wait (*(unsigned int *)funcs[4].addr)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[5].addr)(a)
 #define o_udpmode (*(USHORT *)funcs[6].addr)

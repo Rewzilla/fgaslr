@@ -12,7 +12,7 @@ struct func funcs[] = {
 };
 
 #ifdef HAVE_BIND
-extern int h_errno;
+//extern int h_errno;
 #else
 int h_errno;
 #endif

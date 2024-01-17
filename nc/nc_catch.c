@@ -8,7 +8,7 @@ long int got = 1;
 
 __attribute__((section(".lot")))
 struct func funcs[] = {
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_VERBOSE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_BAIL), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_WROTE_TXT), NULL},
@@ -17,7 +17,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define errno (*(int *)funcs[0].addr)
+#define __errno_location() ((int *(*)())funcs[0].addr)()
 #define o_verbose (*(USHORT *)funcs[1].addr)
 #define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
 #define wrote_txt ((char *)funcs[3].addr)

@@ -9,23 +9,24 @@ long int got = 1;
 __attribute__((section(".lot")))
 struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_VERBOSE), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_H_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___H_ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_H_ERRS), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_FPRINTF), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_FFLUSH), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_STDERR), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_PERROR), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
 #define o_verbose (*(USHORT *)funcs[0].addr)
-#define h_errno (*(int *)funcs[1].addr)
+#define __h_errno_location() ((int *(*)())funcs[1].addr)()
 #define h_errs (*(static char **)funcs[2].addr)
 #define fprintf(a, ...) ((int (*)(FILE *,const char *,...))funcs[3].addr)(a, __VA_ARGS__)
 #define fflush(a) ((int (*)(FILE *))funcs[4].addr)(a)
+#undef stderr
 #define stderr (*(FILE **)funcs[5].addr)
-#define errno (*(int *)funcs[6].addr)
+#define __errno_location() ((int *(*)())funcs[6].addr)()
 #define perror(a) ((void (*)(const char *))funcs[7].addr)(a)
 
 /* holler :

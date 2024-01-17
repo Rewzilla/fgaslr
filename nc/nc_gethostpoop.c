@@ -8,8 +8,8 @@ long int got = 1;
 
 __attribute__((section(".lot")))
 struct func funcs[] = {
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_H_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___H_ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_HMALLOC), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_BAIL), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_STRCPY), NULL},
@@ -25,8 +25,8 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define errno (*(int *)funcs[0].addr)
-#define h_errno (*(int *)funcs[1].addr)
+#define __errno_location() ((int *(*)())funcs[0].addr)()
+#define __h_errno_location() ((int *(*)())funcs[1].addr)()
 #define Hmalloc(a) ((char * (*)(unsigned int))funcs[2].addr)(a)
 #define bail(...) ((void (*)(char *,...))funcs[3].addr)(__VA_ARGS__)
 #define strcpy(a,b) ((char * (*)(char *,const char *))funcs[4].addr)(a,b)

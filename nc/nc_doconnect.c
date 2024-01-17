@@ -16,7 +16,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_LCLEND), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_REMEND), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_BIND), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_INET_NTOA), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_SLEEP), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_LISTEN), NULL},
@@ -29,7 +29,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_GATES), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_ARM), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_WAIT), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_SETJMP), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC__SETJMP), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_CONNECT), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_CLOSE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_JBUF), NULL},
@@ -44,7 +44,7 @@ struct func funcs[] = {
 #define lclend (*(SAI **)funcs[5].addr)
 #define remend (*(SAI **)funcs[6].addr)
 #define bind(a,b,c) ((int (*)(int,const struct sockaddr *,socklen_t))funcs[7].addr)(a,b,c)
-#define errno (*(int *)funcs[8].addr)
+#define __errno_location() ((int *(*)())funcs[8].addr)()
 #define inet_ntoa(a) ((char * (*)(struct in_addr))funcs[9].addr)(a)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[10].addr)(a)
 #define o_listen (*(USHORT *)funcs[11].addr)
@@ -57,7 +57,7 @@ struct func funcs[] = {
 #define gates (*(HINF ***)funcs[18].addr)
 #define arm(a,b) ((void (*)(unsigned int,unsigned int))funcs[19].addr)(a,b)
 #define o_wait (*(unsigned int *)funcs[20].addr)
-#define setjmp(a) ((int (*)(jmp_buf))funcs[21].addr)(a)
+#define _setjmp(a) ((int (*)(struct __jmp_buf_tag __env[1]))funcs[21].addr)(a)
 #define connect(a,b,c) ((int (*)(int,const struct sockaddr *,socklen_t))funcs[22].addr)(a,b,c)
 #define close(a) ((int (*)(int))funcs[23].addr)(a)
 #define jbuf (*(jmp_buf *)funcs[24].addr)

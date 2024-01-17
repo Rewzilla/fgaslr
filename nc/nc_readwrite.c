@@ -15,7 +15,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_CLOSE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_INTERVAL), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_SLEEP), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_DING2), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_TIMER1), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_MEMCPY), NULL},
@@ -47,7 +47,7 @@ struct func funcs[] = {
 #define close(a) ((int (*)(int))funcs[4].addr)(a)
 #define o_interval (*(unsigned int *)funcs[5].addr)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[6].addr)(a)
-#define errno (*(int *)funcs[7].addr)
+#define __errno_location() ((int *(*)())funcs[7].addr)()
 #define ding2 (*(fd_set **)funcs[8].addr)
 #define timer1 (*(struct timeval **)funcs[9].addr)
 #define memcpy(a,b,c) ((void * (*)(void *,const void *,size_t))funcs[10].addr)(a,b,c)
@@ -60,6 +60,7 @@ struct func funcs[] = {
 #define atelnet(a,b) ((void (*)(unsigned char *,unsigned int))funcs[17].addr)(a,b)
 #define printf(...) ((int (*)(const char *,...))funcs[18].addr)(a, __VA_ARGS__)
 #define fflush(a) ((int (*)(FILE *))funcs[19].addr)(a)
+#undef stdout
 #define stdout (*(FILE **)funcs[20].addr)
 #define write(a,b,c) ((ssize_t (*)(int,const void *,size_t))funcs[21].addr)(a,b,c)
 #define o_wfile (*(USHORT *)funcs[22].addr)

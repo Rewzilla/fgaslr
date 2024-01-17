@@ -8,16 +8,16 @@ long int got = 1;
 
 __attribute__((section(".lot")))
 struct func funcs[] = {
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_H_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___H_ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_STRCMP), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_STRCASECMP), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_HOLLER), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define errno (*(int *)funcs[0].addr)
-#define h_errno (*(int *)funcs[1].addr)
+#define __errno_location() ((int *(*)())funcs[0].addr)()
+#define __h_errno_location() ((int *(*)())funcs[1].addr)()
 #define strcmp(a,b) ((int (*)(const char *,const char *))funcs[2].addr)(a,b)
 #define strcasecmp(a,b) ((int (*)(const char *,const char *))funcs[3].addr)(a,b)
 #define holler(...) ((void (*)(char *,...))funcs[4].addr)(__VA_ARGS__)

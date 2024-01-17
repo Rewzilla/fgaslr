@@ -28,12 +28,6 @@ void init() {
 void *resolve_in_library(const char *function_str, const char *library_str) {
 
 	void *h, *addr;
-	char *function_str_alt1;
-
-	// Look for variants with "__..." prefix, like "res_init" == "__res_init"
-	// sort of an ugly hack, but it works for many cases.
-	function_str_alt1 = alloca(strlen(function_str) + 3);
-	sprintf(function_str_alt1, "__%s", function_str);
 
 	h = dlopen(library_str, RTLD_LAZY);
 
@@ -45,9 +39,6 @@ void *resolve_in_library(const char *function_str, const char *library_str) {
 	}
 
 	addr = dlsym(h, function_str);
-
-	if (addr == NULL)
-		addr = dlsym(h, function_str_alt1);
 
 	if (addr == NULL) {
 		fgaslr_debug("Error locating '%s' in shared library '%s': %s\n", function_str, library_str, dlerror());

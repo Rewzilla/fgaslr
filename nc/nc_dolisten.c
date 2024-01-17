@@ -8,7 +8,7 @@ long int got = 1;
 
 __attribute__((section(".lot")))
 struct func funcs[] = {
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_UDPMODE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_BAIL), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_LISTEN), NULL},
@@ -23,7 +23,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_NTOHS), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_ARM), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_WAIT), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_SETJMP), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC__SETJMP), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_JBUF), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_REMEND), NULL},
 	// These are necessary for the Debug() macro
@@ -45,7 +45,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define errno (*(int *)funcs[0].addr)
+#define __errno_location() ((int *(*)())funcs[6].addr)()
 #define o_udpmode (*(USHORT *)funcs[1].addr)
 #define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
 #define listen(a,b) ((int (*)(int,int))funcs[3].addr)(a,b)
@@ -60,12 +60,13 @@ struct func funcs[] = {
 #define ntohs(a) ((uint16_t (*)(uint16_t))funcs[12].addr)(a)
 #define arm(a,b) ((void (*)(unsigned int,unsigned int))funcs[13].addr)(a,b)
 #define o_wait (*(unsigned int *)funcs[14].addr)
-#define setjmp(a) ((int (*)(jmp_buf))funcs[15].addr)(a)
+#define _setjmp(a) ((int (*)(struct __jmp_buf_tag __env[1]))funcs[15].addr)(a)
 #define jbuf (*(jmp_buf *)funcs[16].addr)
 #define recvfrom(a,b,c,d,e,f) ((ssize_t (*)(int,void *,size_t,int,struct sockaddr *,socklen_t *))funcs[17].addr)(a,b,c,d,e,f)
 #define remend (*(SAI **)funcs[18].addr)
 #define printf(...) ((int (*)(const char *,...))funcs[19].addr)(a, __VA_ARGS__)
 #define fflush(a) ((int (*)(FILE *))funcs[20].addr)(a)
+#undef stdout
 #define stdout (*(FILE **)funcs[21].addr)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[22].addr)(a)
 #define connect(a,b,c) ((int (*)(int,const struct sockaddr *,socklen_t))funcs[23].addr)(a,b,c)

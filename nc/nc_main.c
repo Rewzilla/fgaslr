@@ -8,7 +8,7 @@ long int got = 1;
 
 __attribute__((section(".lot")))
 struct func funcs[] = {
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_RES_INIT), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___RES_INIT), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_LCLEND), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_REMEND), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_HMALLOC), NULL},
@@ -17,9 +17,9 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_DING1), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_DING2), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_PORTPOOP), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_GATESPTR), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_H_ERRNO), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC___H_ERRNO_LOCATION), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_SIGNAL), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_FPRINTF), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_FFLUSH), NULL},
@@ -77,7 +77,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define res_init() ((int (*)())funcs[0].addr)()
+#define __res_init() ((int (*)())funcs[0].addr)()
 #define lclend (*(SAI **)funcs[1].addr)
 #define remend (*(SAI **)funcs[2].addr)
 #define Hmalloc(a) ((char * (*)(unsigned int))funcs[3].addr)(a)
@@ -86,9 +86,9 @@ struct func funcs[] = {
 #define ding1 (*(fd_set **)funcs[6].addr)
 #define ding2 (*(fd_set **)funcs[7].addr)
 #define portpoop (*(PINF **)funcs[8].addr)
-#define errno (*(int *)funcs[9].addr)
+#define __errno_location() ((int *(*)())funcs[9].addr)()
 #define gatesptr (*(int *)funcs[10].addr)
-#define h_errno (*(int *)funcs[11].addr)
+#define __h_errno_location() ((int *(*)())funcs[11].addr)()
 #define signal(a,b) ((sighandler_t (*)(int,sighandler_t))funcs[12].addr)(a,b)
 #define fprintf(a, ...) ((int (*)(FILE *,const char *,...))funcs[13].addr)(a, __VA_ARGS__)
 #define fflush(a) ((int (*)(FILE *))funcs[14].addr)(a)

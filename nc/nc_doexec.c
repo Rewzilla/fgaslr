@@ -24,6 +24,7 @@ struct func funcs[] = {
 
 #define printf(...) ((int (*)(const char *,...))funcs[0].addr)(a, __VA_ARGS__)
 #define fflush(a) ((int (*)(FILE *))funcs[1].addr)(a)
+#undef stdout
 #define stdout (*(FILE **)funcs[2].addr)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[3].addr)(a)
 #define dup2(a,b) ((int (*)(int,int))funcs[4].addr)(a,b)
