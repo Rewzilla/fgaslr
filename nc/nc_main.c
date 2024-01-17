@@ -74,6 +74,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_INSAVED), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC_STDERR), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
@@ -143,6 +144,8 @@ struct func funcs[] = {
 #define insaved (*(unsigned int *)funcs[62].addr)
 #define catch ((void (*)())funcs[63].addr)
 #define udptest(a,b) ((int (*)(int,IA *))funcs[64].addr)(a,b)
+#undef stderr
+#define stderr (*(FILE **)funcs[65].addr)
 
 /* main :
    now we pull it all together... */
