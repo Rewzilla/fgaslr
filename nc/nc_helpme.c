@@ -21,6 +21,7 @@ struct func funcs[] = {
 #ifdef HAVE_HELP		/* unless we wanna be *really* cryptic */
 /* helpme :
    the obvious */
+void
 helpme()
 {
   o_verbose = 1;

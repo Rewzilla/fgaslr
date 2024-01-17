@@ -30,7 +30,7 @@ const char *funcstr[] = {
 	"ding1",
 	"ding2",
 	"portpoop",
-	"Stage",
+	"stage",
 	"o_alla",
 	"o_interval",
 	"o_listen",

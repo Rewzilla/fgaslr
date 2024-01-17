@@ -33,7 +33,7 @@ all:
 	$(CC) $(CFLAGS) -c -o nc_ding1.o nc_ding1.c
 	$(CC) $(CFLAGS) -c -o nc_ding2.o nc_ding2.c
 	$(CC) $(CFLAGS) -c -o nc_portpoop.o nc_portpoop.c
-	$(CC) $(CFLAGS) -c -o nc_Stage.o nc_Stage.c
+	$(CC) $(CFLAGS) -c -o nc_stage.o nc_stage.c
 	$(CC) $(CFLAGS) -c -o nc_o_alla.o nc_o_alla.c
 	$(CC) $(CFLAGS) -c -o nc_o_interval.o nc_o_interval.c
 	$(CC) $(CFLAGS) -c -o nc_o_listen.o nc_o_listen.c

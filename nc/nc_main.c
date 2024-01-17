@@ -73,6 +73,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_EXIT), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_INSAVED), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
@@ -119,12 +120,13 @@ struct func funcs[] = {
 #define timer2 (*(struct timeval **)funcs[40].addr)
 #define o_zero (*(USHORT *)funcs[41].addr)
 #define printf(...) ((int (*)(const char *,...))funcs[42].addr)(a, __VA_ARGS__)
+#undef stdout
 #define stdout (*(FILE **)funcs[43].addr)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[44].addr)(a)
 #define time(a) ((time_t (*)(time_t *))funcs[45].addr)(a)
 #define close(a) ((int (*)(int))funcs[46].addr)(a)
 #define ofd (*(int *)funcs[47].addr)
-#define open(a,b,...) ((int (*)(const char *,int,...))funcs[48].addr)(a,b,__VA_ARGS__)
+#define open(a,b,...) ((int (*)(unsigned char *,int,...))funcs[48].addr)(a,b,__VA_ARGS__)
 #define netfd (*(int *)funcs[49].addr)
 #define dolisten(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[50].addr)(a,b,c,d)
 #define doexec(a) ((void (*)(int))funcs[51].addr)(a)
@@ -136,10 +138,11 @@ struct func funcs[] = {
 #define Single (*(USHORT *)funcs[57].addr)
 #define loadports(a,b,c) ((void (*)(char *,USHORT,USHORT))funcs[58].addr)(a,b,c)
 #define nextport(a) ((USHORT (*)(char *))funcs[59].addr)(a)
-#define doconnect(a,b,c,d) ((int (*)(IA *,USHORT *,IA *,USHORT))funcs[60].addr)(a,b,c,d)
+#define doconnect(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[60].addr)(a,b,c,d)
 #define exit(a) ((void (*)(int))funcs[60].addr)(a)
 #define insaved (*(unsigned int *)funcs[62].addr)
 #define catch ((void (*)())funcs[63].addr)
+#define udptest(a,b) ((int (*)(int,IA *))funcs[64].addr)(a,b)
 
 /* main :
    now we pull it all together... */
