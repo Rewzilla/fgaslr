@@ -8,7 +8,7 @@ help:
 	@echo "Usage:"
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-16s\033[0m %s\n", $$1, $$2}'
 
-all: toy md5sum		## Build all programs
+all: toy md5sum nc		## Build all programs
 
 toy:		## Build toy program
 	$(MAKE) -C toy
