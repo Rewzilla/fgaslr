@@ -25,7 +25,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_READ), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_BIGBUF_NET), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_TN), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_O_ATELNET), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_ATELNET), NULL},
 	// These are necessary for the Debug() macro
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_PRINTF), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_FFLUSH), NULL},
@@ -36,10 +36,11 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_WROTE_OUT), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_FINDLINE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_WROTE_NET), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_INSAVED), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[0].addr)(a,b,c,d,e,f,g)
+#define holler(...) ((void (*)(char *,...))funcs[0].addr)(__VA_ARGS__)
 #define ding1 (*(fd_set **)funcs[1].addr)
 #define bigbuf_in (*(char **)funcs[2].addr)
 #define Single (*(USHORT *)funcs[3].addr)
@@ -66,6 +67,7 @@ struct func funcs[] = {
 #define wrote_out (*(int *)funcs[24].addr)
 #define findline(a,b) ((unsigned int (*)(char *,unsigned int))funcs[25].addr)(a,b)
 #define wrote_net (*(int *)funcs[26].addr)
+#define insaved (*(unsigned int *)funcs[27].addr)
 
 /* readwrite :
    handle stdin/stdout/network I/O.  Bwahaha!! -- the select loop from hell.

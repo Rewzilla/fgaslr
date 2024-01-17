@@ -41,17 +41,18 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_GETHOSTPOOP), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_NFLAG), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_MEMCMP), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_DOCONNECT), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
 #define errno (*(int *)funcs[0].addr)
 #define o_udpmode (*(USHORT *)funcs[1].addr)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[2].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
 #define listen(a,b) ((int (*)(int,int))funcs[3].addr)(a,b)
 #define o_verbose (*(USHORT *)funcs[4].addr)
-#define getsockname(a,b,c) ((int (*)(int,struct sockaddr *,socklen_t))funcs[5].addr)(a,b,c)
+#define getsockname(a,b,c) ((int (*)(int,struct sockaddr *,socklen_t *))funcs[5].addr)(a,b,c)
 #define lclend (*(SAI **)funcs[6].addr)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[7].addr)(a,b,c,d,e,f,g)
+#define holler(...) ((void (*)(char *,...))funcs[7].addr)(__VA_ARGS__)
 #define strcpy(a,b) ((char * (*)(char *,const char *))funcs[8].addr)(a,b)
 #define bigbuf_net (*(char **)funcs[9].addr)
 #define strcat(a,b) ((char * (*)(char *,const char *))funcs[10].addr)(a,b)
@@ -61,22 +62,23 @@ struct func funcs[] = {
 #define o_wait (*(unsigned int *)funcs[14].addr)
 #define setjmp(a) ((int (*)(jmp_buf))funcs[15].addr)(a)
 #define jbuf (*(jmp_buf *)funcs[16].addr)
-#define recvfrom(a,b,c,d,e,f) ((ssize_t (*)(int,void *,size_t,int,struct sockaddr *,socklen_t))funcs[17].addr)(a,b,c,d,e,f)
+#define recvfrom(a,b,c,d,e,f) ((ssize_t (*)(int,void *,size_t,int,struct sockaddr *,socklen_t *))funcs[17].addr)(a,b,c,d,e,f)
 #define remend (*(SAI **)funcs[18].addr)
 #define printf(...) ((int (*)(const char *,...))funcs[19].addr)(a, __VA_ARGS__)
 #define fflush(a) ((int (*)(FILE *))funcs[20].addr)(a)
 #define stdout (*(FILE **)funcs[21].addr)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[22].addr)(a)
 #define connect(a,b,c) ((int (*)(int,const struct sockaddr *,socklen_t))funcs[23].addr)(a,b,c)
-#define accept(a,b,c) ((int (*)(int,struct sockaddr *,socklen_t))funcs[24].addr)(a,b,c)
+#define accept(a,b,c) ((int (*)(int,struct sockaddr *,socklen_t *))funcs[24].addr)(a,b,c)
 #define close(a) ((int (*)(int))funcs[25].addr)(a)
 #define optbuf (*(char **)funcs[26].addr)
 #define Hmalloc(a) ((char * (*)(unsigned int))funcs[27].addr)(a)
-#define setsockopt(a,b,c,d,e) ((int (*)(int,int,int,void *,socketlen_t))funcs[28].addr)(a,b,c,d,e)
+#define setsockopt(a,b,c,d,e) ((int (*)(int,int,int,void *,socklen_t))funcs[28].addr)(a,b,c,d,e)
 #define memset(a,b,c) ((void * (*)(void *,int,size_t))funcs[29].addr)(a,b,c)
 #define gethostpoop(a,b) ((HINF * (*)(char *,USHORT))funcs[30].addr)(a,b)
 #define o_nflag (*(USHORT *)funcs[31].addr)
 #define memcmp(a,b,c) ((int (*)(const void *,const void *,size_t))funcs[32].addr)(a,b,c)
+#define doconnect(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[33].addr)(a,b,c,d)
 
 /* dolisten :
    just like doconnect, and in fact calls a hunk of doconnect, but listens for
@@ -92,7 +94,7 @@ int dolisten (rad, rp, lad, lp)
   register int nnetfd;
   register int rr;
   HINF * whozis = NULL;
-  int x;
+  unsigned int x;		// PATCH
   char * cp;
   USHORT z;
   errno = 0;

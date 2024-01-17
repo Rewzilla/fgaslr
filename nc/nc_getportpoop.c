@@ -21,22 +21,24 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_ATOI), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_GETSERVBYNAME), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_SPRINTF), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_O_UDPMODE), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
 #define o_verbose (*(USHORT *)funcs[0].addr)
-#define p_tcp ((static char *)funcs[1].addr)
-#define p_udp ((static char *)funcs[2].addr)
+#define p_tcp ((char *)funcs[1].addr)
+#define p_udp ((char *)funcs[2].addr)
 #define portpoop (*(PINF **)funcs[3].addr)
 #define o_nflag (*(USHORT *)funcs[4].addr)
 #define htons(a) ((uint16_t (*)(uint16_t))funcs[5].addr)(a)
 #define getservbyport(a,b) ((struct servent * (*)(int,const char *))funcs[6].addr)(a,b)
 #define ntohs(a) ((uint16_t (*)(uint16_t))funcs[7].addr)(a)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[8].addr)(a,b,c,d,e,f,g)
+#define holler(...) ((void (*)(char *,...))funcs[8].addr)(__VA_ARGS__)
 #define strncpy(a,b,c) ((char * (*)(char *,const char *,size_t))funcs[9].addr)(a,b,c)
 #define atoi(a) ((int (*)(const char *))funcs[10].addr)(a)
 #define getservbyname(a,b) ((struct servent * (*)(const char *,const char *))funcs[11].addr)(a,b)
 #define sprintf(a,...) ((int (*)(char *,...))funcs[12].addr)(a,__VA_ARGS__)
+#define o_udpmode (*(USHORT *)funcs[13].addr)
 
 /* getportpoop :
    Same general idea as gethostpoop -- look up a port in /etc/services, fill

@@ -19,8 +19,8 @@ struct func funcs[] = {
 
 #define errno (*(int *)funcs[0].addr)
 #define o_verbose (*(USHORT *)funcs[1].addr)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[2].addr)(a,b,c,d,e,f,g) 
-#define wrote_txt ((static char *)funcs[3].addr)
+#define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
+#define wrote_txt ((char *)funcs[3].addr)
 #define wrote_net (*(int *)funcs[4].addr)
 #define wrote_out (*(int *)funcs[5].addr)
 

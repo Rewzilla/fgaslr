@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <resolv.h>
+typedef void (*sighandler_t)(int);
 
 /* Netcat 1.10 RELEASE 960320
 

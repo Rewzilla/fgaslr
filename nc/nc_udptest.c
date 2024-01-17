@@ -22,12 +22,12 @@ struct func funcs[] = {
 
 #define write(a,b,c) ((ssize_t (*)(int,const void *,size_t))funcs[0].addr)(a,b,c)
 #define bigbuf_in (*(char **)funcs[1].addr)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[2].addr)(a,b,c,d,e,f,g)
+#define holler(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
 #define errno (*(int *)funcs[3].addr)
 #define o_wait (*(unsigned int *)funcs[4].addr)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[5].addr)(a)
 #define o_udpmode (*(USHORT *)funcs[6].addr)
-#define doconnect(a,b,c,d) ((int (*)(IA *,USHORT *,IA *,USHORT))funcs[7].addr)(a,b,c,d)
+#define doconnect(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[7].addr)(a,b,c,d)
 #define close(a) ((int (*)(int))funcs[8].addr)(a)
 
 /* udptest :

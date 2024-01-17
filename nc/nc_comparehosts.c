@@ -20,7 +20,7 @@ struct func funcs[] = {
 #define h_errno (*(int *)funcs[1].addr)
 #define strcmp(a,b) ((int (*)(const char *,const char *))funcs[2].addr)(a,b)
 #define strcasecmp(a,b) ((int (*)(const char *,const char *))funcs[3].addr)(a,b)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[4].addr)(a,b,c,d,e,f,g)
+#define holler(...) ((void (*)(char *,...))funcs[4].addr)(__VA_ARGS__)
 
 /* comparehosts :
    cross-check the host_poop we have so far against new gethostby*() info,

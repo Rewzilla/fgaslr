@@ -12,7 +12,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[0].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[0].addr)(__VA_ARGS__)
 
 /* loadports :
    set "to be tested" indications in BLOCK, from LO to HI.  Almost too small

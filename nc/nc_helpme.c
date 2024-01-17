@@ -9,14 +9,14 @@ long int got = 1;
 __attribute__((section(".lot")))
 struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_VERBOSE), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_O_HOLLER), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_O_BAIL), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_HOLLER), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_BAIL), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
 #define o_verbose (*(USHORT *)funcs[0].addr)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[1].addr)(a,b,c,d,e,f,g)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[2].addr)(a,b,c,d,e,f,g)
+#define holler(...) ((void (*)(char *,...))funcs[1].addr)(__VA_ARGS__)
+#define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
 
 #ifdef HAVE_HELP		/* unless we wanna be *really* cryptic */
 /* helpme :

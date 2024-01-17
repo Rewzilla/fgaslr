@@ -16,7 +16,7 @@ struct func funcs[] = {
 
 #define malloc(a) ((void * (*)(size_t))funcs[0].addr)(a)
 #define memset(a,b,c) ((void * (*)(void *,int,size_t))funcs[1].addr)(a,b,c)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[2].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
 
 /* Hmalloc :
    malloc up what I want, rounded up to *4, and pre-zeroed.  Either succeeds

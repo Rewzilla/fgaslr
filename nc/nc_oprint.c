@@ -20,12 +20,12 @@ struct func funcs[] = {
 };
 
 #define ofd (*(int *)funcs[0].addr)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[1].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[1].addr)(__VA_ARGS__)
 #define stage (*(unsigned char **)funcs[2].addr)
 #define wrote_out (*(int *)funcs[3].addr)
 #define wrote_net (*(int *)funcs[4].addr)
-#define sprintf(a,...) ((int (*)(char *,...))funcs[5].addr)(a,__VA_ARGS__)
-#define hexnibs ((static char *)funcs[6].addr)
+#define sprintf(a,...) ((int (*)(unsigned char *,...))funcs[5].addr)(a,__VA_ARGS__)
+#define hexnibs ((char *)funcs[6].addr)
 #define write(a,b,c) ((ssize_t (*)(int,const void *,size_t))funcs[7].addr)(a,b,c)
 
 /* oprint :

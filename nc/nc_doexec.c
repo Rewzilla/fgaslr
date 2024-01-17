@@ -31,7 +31,7 @@ struct func funcs[] = {
 #define strrchr(a,b) ((char * (*)(const char *,int))funcs[6].addr)(a,b)
 #define pr00gie (*(char **)funcs[7].addr)
 #define execl(a,b,...) ((int (*)(const char *,const char *,...))funcs[8].addr)(a,b,__VA_ARGS__)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[3].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[9].addr)(__VA_ARGS__)
 
 #ifdef GAPING_SECURITY_HOLE
 /* doexec :

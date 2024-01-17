@@ -39,7 +39,6 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_HELPME), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_INTERVAL), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_LISTEN), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_O_NFLAG), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_STAGE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_WFILE), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_GETPORTPOOP), NULL},
@@ -72,6 +71,8 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_NEXTPORT), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_DOCONNECT), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_EXIT), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_INSAVED), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
@@ -91,11 +92,11 @@ struct func funcs[] = {
 #define fprintf(a, ...) ((int (*)(FILE *,const char *,...))funcs[13].addr)(a, __VA_ARGS__)
 #define fflush(a) ((int (*)(FILE *))funcs[14].addr)(a)
 #define read(a,b,c) ((ssize_t (*)(int,const void *,size_t))funcs[15].addr)(a,b,c)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[16].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[16].addr)(__VA_ARGS__)
 #define findline(a,b) ((unsigned int (*)(char *,unsigned int))funcs[17].addr)(a,b)
 #define memcpy(a,b,c) ((void * (*)(void *,const void *,size_t))funcs[18].addr)(a,b,c)
 #define strchr(a,b) ((char * (*)(const char *,int))funcs[19].addr)(a,b)
-#define getopt(a,b,c) ((int (*)(int,char * const,const char *))funcs[20].addr)(a,b,c)
+#define getopt(a,b,c) ((int (*)(int,char **,const char *))funcs[20].addr)(a,b,c)
 #define o_alla (*(USHORT *)funcs[21].addr)
 #define pr00gie (*(char **)funcs[22].addr)
 #define atoi(a) ((int (*)(const char *))funcs[23].addr)(a)
@@ -103,37 +104,42 @@ struct func funcs[] = {
 #define gates (*(HINF ***)funcs[25].addr)
 #define gethostpoop(a,b) ((HINF * (*)(char *,USHORT))funcs[26].addr)(a,b)
 #define o_nflag (*(USHORT *)funcs[27].addr)
-#define stage (*(unsigned char **)funcs[28].addr)
-#define o_wfile (*(USHORT *)funcs[29].addr)
-#define gethostpoop(a,b) ((USHORT (*)(char *,unsigned int))funcs[30].addr)(a,b)
-#define o_random (*(USHORT *)funcs[31].addr)
-#define o_tn (*(USHORT *)funcs[32].addr)
-#define o_udpmode (*(USHORT *)funcs[33].addr)
-#define o_verbose (*(USHORT *)funcs[34].addr)
-#define o_wait (*(unsigned int *)funcs[35].addr)
-#define timer1 (*(struct timeval **)funcs[36].addr)
-#define timer2 (*(struct timeval **)funcs[37].addr)
-#define o_zero (*(USHORT *)funcs[38].addr)
-#define printf(...) ((int (*)(const char *,...))funcs[39].addr)(a, __VA_ARGS__)
-#define stdout (*(FILE **)funcs[40].addr)
-#define sleep(a) ((unsigned int (*)(unsigned int))funcs[41].addr)(a)
-#define time(a) ((time_t (*)(time_t *))funcs[42].addr)(a)
-#define close(a) ((int (*)(int))funcs[43].addr)(a)
-#define ofd (*(int *)funcs[44].addr)
-#define open(a,b) ((int (*)(const char *,int))funcs[45].addr)(a,b)
-#define netfd (*(int *)funcs[46].addr)
-#define dolisten(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[47].addr)(a,b,c,d)
-#define doexec(a) ((void (*)(int))funcs[48].addr)(a)
-#define readwrite(a) ((int (*)(int))funcs[49].addr)(a)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[50].addr)(a,b,c,d,e,f,g)
-#define wrote_net (*(int *)funcs[51].addr)
-#define wrote_out (*(int *)funcs[52].addr)
-#define wrote_txt ((static char *)funcs[53].addr)
-#define Single (*(USHORT *)funcs[54].addr)
-#define loadports(a,b,c) ((void (*)(char *,USHORT,USHORT))funcs[55].addr)(a,b,c)
-#define nextport(a) ((USHORT (*)(char *))funcs[56].addr)(a)
-#define doconnect(a,b,c,d) ((int (*)(IA *,USHORT *,IA *,USHORT))funcs[57].addr)(a,b,c,d)
-#define exit(a) ((void (*)(int))funcs[58].addr)(a)
+#define helpme() ((void (*)())funcs[28].addr)()
+#define o_interval (*(unsigned int *)funcs[29].addr)
+#define o_listen (*(USHORT *)funcs[30].addr)
+#define stage (*(unsigned char **)funcs[31].addr)
+#define o_wfile (*(USHORT *)funcs[32].addr)
+#define getportpoop(a,b) ((USHORT (*)(char *,unsigned int))funcs[33].addr)(a,b)
+#define o_random (*(USHORT *)funcs[34].addr)
+#define o_tn (*(USHORT *)funcs[35].addr)
+#define o_udpmode (*(USHORT *)funcs[36].addr)
+#define o_verbose (*(USHORT *)funcs[37].addr)
+#define o_wait (*(unsigned int *)funcs[38].addr)
+#define timer1 (*(struct timeval **)funcs[39].addr)
+#define timer2 (*(struct timeval **)funcs[40].addr)
+#define o_zero (*(USHORT *)funcs[41].addr)
+#define printf(...) ((int (*)(const char *,...))funcs[42].addr)(a, __VA_ARGS__)
+#define stdout (*(FILE **)funcs[43].addr)
+#define sleep(a) ((unsigned int (*)(unsigned int))funcs[44].addr)(a)
+#define time(a) ((time_t (*)(time_t *))funcs[45].addr)(a)
+#define close(a) ((int (*)(int))funcs[46].addr)(a)
+#define ofd (*(int *)funcs[47].addr)
+#define open(a,b,...) ((int (*)(const char *,int,...))funcs[48].addr)(a,b,__VA_ARGS__)
+#define netfd (*(int *)funcs[49].addr)
+#define dolisten(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[50].addr)(a,b,c,d)
+#define doexec(a) ((void (*)(int))funcs[51].addr)(a)
+#define readwrite(a) ((int (*)(int))funcs[52].addr)(a)
+#define holler(...) ((void (*)(char *,...))funcs[53].addr)(__VA_ARGS__)
+#define wrote_net (*(int *)funcs[54].addr)
+#define wrote_out (*(int *)funcs[55].addr)
+#define wrote_txt ((char *)funcs[56].addr)
+#define Single (*(USHORT *)funcs[57].addr)
+#define loadports(a,b,c) ((void (*)(char *,USHORT,USHORT))funcs[58].addr)(a,b,c)
+#define nextport(a) ((USHORT (*)(char *))funcs[59].addr)(a)
+#define doconnect(a,b,c,d) ((int (*)(IA *,USHORT *,IA *,USHORT))funcs[60].addr)(a,b,c,d)
+#define exit(a) ((void (*)(int))funcs[60].addr)(a)
+#define insaved (*(unsigned int *)funcs[62].addr)
+#define catch ((void (*)())funcs[63].addr)
 
 /* main :
    now we pull it all together... */

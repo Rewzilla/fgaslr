@@ -32,14 +32,15 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_SETJMP), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_CONNECT), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_CLOSE), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_JBUF), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
 #define o_udpmode (*(USHORT *)funcs[0].addr)
 #define socket(a,b,c) ((int (*)(int,int,int))funcs[1].addr)(a,b,c)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[2].addr)(a,b,c,d,e,f,g)
-#define setsockopt(a,b,c,d,e) ((int (*)(int,int,int,const void *,socketlen_t))funcs[3].addr)(a,b,c,d,e)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[4].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
+#define setsockopt(a,b,c,d,e) ((int (*)(int,int,int,const void *,socklen_t))funcs[3].addr)(a,b,c,d,e)
+#define holler(...) ((void (*)(char *,...))funcs[4].addr)(__VA_ARGS__)
 #define lclend (*(SAI **)funcs[5].addr)
 #define remend (*(SAI **)funcs[6].addr)
 #define bind(a,b,c) ((int (*)(int,const struct sockaddr *,socklen_t))funcs[7].addr)(a,b,c)
@@ -59,6 +60,7 @@ struct func funcs[] = {
 #define setjmp(a) ((int (*)(jmp_buf))funcs[21].addr)(a)
 #define connect(a,b,c) ((int (*)(int,const struct sockaddr *,socklen_t))funcs[22].addr)(a,b,c)
 #define close(a) ((int (*)(int))funcs[23].addr)(a)
+#define jbuf (*(jmp_buf *)funcs[24].addr)
 
 /* doconnect :
    do all the socket stuff, and return an fd for one of

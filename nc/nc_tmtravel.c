@@ -22,7 +22,7 @@ struct func funcs[] = {
 #define longjmp(a,b) ((void (*)(jmp_buf,int))funcs[2].addr)(a,b)
 #define jval (*(int *)funcs[3].addr)
 #define jbuf (*(jmp_buf *)funcs[4].addr)
-#define bail(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *,))funcs[5].addr)(a,b,c,d,e,f,g)
+#define bail(...) ((void (*)(char *,...))funcs[5].addr)(__VA_ARGS__)
 
 /* timeout and other signal handling cruft */
 void tmtravel ()

@@ -18,7 +18,7 @@ struct func funcs[] = {
 };
 
 #define o_verbose (*(USHORT *)funcs[0].addr)
-#define holler(a,b,c,d,e,f,g) ((void (*)(char *,char *,char *,char *,char *,char *,char *))funcs[1].addr)(a,b,c,d,e,f,g)
+#define holler(...) ((void (*)(char *,...))funcs[1].addr)(__VA_ARGS__)
 #define close(a) ((int (*)(int))funcs[2].addr)(a)
 #define sleep(a) ((unsigned int (*)(unsigned int))funcs[3].addr)(a)
 #define exit(a) ((void (*)(int))funcs[4].addr)(a)
