@@ -1,6 +1,5 @@
 
 CFLAGS		+= -I./ \
-	-fno-stack-protector \
 	-Wno-format-security -Wno-implicit-int -Wno-comment -Wno-unused-variable
 
 all:

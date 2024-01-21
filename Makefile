@@ -1,6 +1,6 @@
 
 export CC		:= gcc
-export CFLAGS	:= -fPIC -fno-jump-tables -Wall
+export CFLAGS	:= -fPIC -fno-jump-tables -Wall -fno-stack-protector
 
 .PHONY: all toy md5sum nc clean
 
