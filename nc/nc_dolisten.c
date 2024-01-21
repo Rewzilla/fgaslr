@@ -43,6 +43,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_O_NFLAG), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_MEMCMP), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_DOCONNECT), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC_SPRINTF), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
@@ -75,12 +76,13 @@ struct func funcs[] = {
 #define close(a) ((int (*)(int))funcs[25].addr)(a)
 #define optbuf (*(char **)funcs[26].addr)
 #define Hmalloc(a) ((char * (*)(unsigned int))funcs[27].addr)(a)
-#define setsockopt(a,b,c,d,e) ((int (*)(int,int,int,void *,socklen_t))funcs[28].addr)(a,b,c,d,e)
+#define getsockopt(a,b,c,d,e) ((int (*)(int,int,int,void *,socklen_t *))funcs[28].addr)(a,b,c,d,e)
 #define memset(a,b,c) ((void * (*)(void *,int,size_t))funcs[29].addr)(a,b,c)
 #define gethostpoop(a,b) ((HINF * (*)(char *,USHORT))funcs[30].addr)(a,b)
 #define o_nflag (*(USHORT *)funcs[31].addr)
 #define memcmp(a,b,c) ((int (*)(const void *,const void *,size_t))funcs[32].addr)(a,b,c)
 #define doconnect(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[33].addr)(a,b,c,d)
+#define sprintf(a,...) ((int (*)(char *,...))funcs[34].addr)(a,__VA_ARGS__)
 
 /* dolisten :
    just like doconnect, and in fact calls a hunk of doconnect, but listens for

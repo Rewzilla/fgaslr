@@ -73,12 +73,13 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_EXIT), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_INSAVED), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
-	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
+	{FGASLR_ENTRY(LIB_SELF, FUNC_UDPTEST), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_STDERR), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_OPTARG), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_OPTIND), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_OPTOPT), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_SRAND), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC_SRANDOM), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC_RANDOM), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
@@ -153,7 +154,8 @@ struct func funcs[] = {
 #define optarg (*(char **)funcs[66].addr)
 #define optind (*(int *)funcs[67].addr)
 #define optopt (*(int *)funcs[68].addr)
-#define srand(a) ((void (*)(unsigned int))funcs[69].addr)(a)
+#define srandom(a) ((void (*)(unsigned int))funcs[69].addr)(a)
+#define random(a) ((long (*)())funcs[70].addr)(a)
 
 /* main :
    now we pull it all together... */

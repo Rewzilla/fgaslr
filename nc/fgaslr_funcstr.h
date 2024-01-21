@@ -122,6 +122,9 @@ const char *funcstr[] = {
 	"optind",
 	"optopt",
 	"srand",
+	"rand",
+	"srandom",
+	"random",
 	"recvfrom",
 
 	"(end)",

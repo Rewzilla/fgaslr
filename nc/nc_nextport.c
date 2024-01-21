@@ -8,8 +8,11 @@ long int got = 1;
 
 __attribute__((section(".lot")))
 struct func funcs[] = {
+	{FGASLR_ENTRY(LIB_LIBC, FUNC_RANDOM), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
+
+#define random(a) ((long (*)())funcs[0].addr)(a)
 
 /* nextport :
    Come up with the next port to try, be it random or whatever.  "block" is
