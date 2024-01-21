@@ -22,6 +22,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_GETHOSTBYADDR), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_HOLLER), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_COMPAREHOSTS), NULL},
+	{FGASLR_ENTRY(LIB_LIBC, FUNC_INET_NTOA), NULL},
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
@@ -39,6 +40,7 @@ struct func funcs[] = {
 #define gethostbyaddr(a,b,c) ((struct hostent * (*)(const void *,socklen_t,int))funcs[11].addr)(a,b,c)
 #define holler(...) ((void (*)(char *,...))funcs[12].addr)(__VA_ARGS__)
 #define comparehosts(a,b) ((int (*)(HINF *,struct hostent *))funcs[13].addr)(a,b)
+#define inet_ntoa(a) ((char * (*)(struct in_addr))funcs[14].addr)(a)
 
 /* gethostpoop :
    resolve a host 8 ways from sunday; return a new host_poop struct with its
