@@ -23,3 +23,6 @@ clean:		## Clean up all build files
 	$(MAKE) -C toy clean
 	$(MAKE) -C md5sum clean
 	$(MAKE)	-C nc clean
+
+check:		## Run sanity checks to assist with debugging
+	./src/check_missing.sh toy md5sum nc
