@@ -223,7 +223,14 @@ void fgaslr_resolve(struct func *funcs) {
 				ftruncate(memfd, MALIGN(mapping->size));
 
 				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE, memfd, 0);
-				memcpy(mapping->addr, object + mapping->offset, mapping->size);
+
+				// If this is the .bss segment, just initialize it to NULL
+				// otherwise, copy data from the binary image
+				if (strcmp(mapping->name, ".bss") == 0)
+					memset(mapping->addr, '\0', mapping->size);
+				else
+					memcpy(mapping->addr, object + mapping->offset, mapping->size);
+
 				addr += MALIGN(mapping->size);
 				fgaslr_debug("section '%s' mapped at %p\n", mapping->name, mapping->addr);
 
