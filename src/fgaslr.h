@@ -8,7 +8,8 @@
 
 #define FGASLR_ADDR_MIN 0x10000000000
 #define FGASLR_ADDR_MAX 0xffffffff000
-#define FGASLR_RAND_SEED time(0)
+//#define FGASLR_RAND_SEED time(0)
+#define FGASLR_RAND_SEED 0
 
 struct func {
 	enum funcid id;

@@ -18,7 +18,7 @@ struct func funcs[] = {
 #define signal(a,b) ((sighandler_t (*)(int,sighandler_t))funcs[0].addr)(a,b)
 #define alarm(a) ((unsigned int (*)(unsigned int))funcs[1].addr)(a)
 #define jval (*(int *)funcs[2].addr)
-#define tmtravel ((void (*)())funcs[4].addr)
+#define tmtravel ((void (*)())funcs[3].addr)
 
 /* arm :
    set the timer.  Zero secs arg means unarm */

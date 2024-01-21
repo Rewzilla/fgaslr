@@ -144,7 +144,7 @@ struct func funcs[] = {
 #define loadports(a,b,c) ((void (*)(char *,USHORT,USHORT))funcs[58].addr)(a,b,c)
 #define nextport(a) ((USHORT (*)(char *))funcs[59].addr)(a)
 #define doconnect(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[60].addr)(a,b,c,d)
-#define exit(a) ((void (*)(int))funcs[60].addr)(a)
+#define exit(a) ((void (*)(int))funcs[61].addr)(a)
 #define insaved (*(unsigned int *)funcs[62].addr)
 #define catch ((void (*)())funcs[63].addr)
 #define udptest(a,b) ((int (*)(int,IA *))funcs[64].addr)(a,b)

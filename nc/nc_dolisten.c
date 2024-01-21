@@ -45,7 +45,7 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
-#define __errno_location() ((int *(*)())funcs[6].addr)()
+#define __errno_location() ((int *(*)())funcs[0].addr)()
 #define o_udpmode (*(USHORT *)funcs[1].addr)
 #define bail(...) ((void (*)(char *,...))funcs[2].addr)(__VA_ARGS__)
 #define listen(a,b) ((int (*)(int,int))funcs[3].addr)(a,b)
