@@ -1,4 +1,6 @@
 
+// source: https://nc110.sourceforge.io/
+
 #include "../src/fgaslr.h"
 
 __attribute__((section(".lot")))

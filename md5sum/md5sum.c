@@ -1,4 +1,6 @@
 
+// source: https://www.netlib.org/crc/md5sum.c
+
 #include "md5sum_types.h"
 
 #include "../src/fgaslr.h"
