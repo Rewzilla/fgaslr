@@ -1,5 +1,5 @@
 
-CFLAGS		+= -I./ \
+CFLAGS		+= -I./ -DENABLE_GRAPH \
 	-Wno-format-security -Wno-implicit-int -Wno-comment -Wno-unused-variable
 
 all:
@@ -68,7 +68,7 @@ all:
 
 	$(CC) $(CFLAGS) -g -o nc.bin nc.c \
 		../src/fgaslr.c -D'PROG_NAME="nc"' \
-		../src/cache.c ../src/mappings.c
+		../src/cache.c ../src/mappings.c ../src/graph.c
 
 clean:
 

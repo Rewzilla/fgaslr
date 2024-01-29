@@ -1,5 +1,5 @@
 
-CFLAGS		+= -I./
+CFLAGS		+= -I./ -DENABLE_GRAPH
 
 # silence warnings from the project code itself, meh
 CFLAGS		+= -Wno-char-subscripts -Wno-unused-function -Wno-unused-variable
@@ -22,7 +22,7 @@ all:
 
 	$(CC) $(CFLAGS) $(LIBS) -g -o md5sum.bin md5sum.c \
 		../src/fgaslr.c -D'PROG_NAME="md5sum"' \
-		../src/cache.c ../src/mappings.c
+		../src/cache.c ../src/mappings.c ../src/graph.c
 
 clean:
 

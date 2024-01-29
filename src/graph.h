@@ -1,0 +1,11 @@
+
+#ifndef GRAPH_H
+#define GRAPH_H
+
+#define GRAPH_FILE "graph_data.js"
+
+void graph_init();
+void graph_fini();
+void graph_add(const char *parent, const char *child);
+
+#endif

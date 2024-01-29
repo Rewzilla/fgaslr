@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
 	init();
 
-	fgaslr_resolve(funcs);
+	fgaslr_init("_main", funcs);
 
 //	ASM_BREAKPOINT();
 

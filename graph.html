@@ -1,0 +1,17 @@
+<!-- src: https://visjs.github.io/vis-network/examples/network/data/dotLanguage/dotLanguage.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Function graph</title>
+    <script src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
+  </head>
+  <body>
+    <div id="graph" style="width: 1024px; height: 768px; border-width: 1px;"></div>
+	<script type="text/javascript" src="graph_data.js"></script>
+    <script type="text/javascript">
+      var container = document.getElementById("graph");
+      var data = vis.parseDOTNetwork(dot);
+      var network = new vis.Network(container, data);
+    </script>
+  </body>
+</html>

@@ -16,6 +16,7 @@
 #include "fgaslr.h"
 #include "cache.h"
 #include "mappings.h"
+#include "graph.h"
 #include "fgaslr_funcstr.h"
 #include "fgaslr_libstr.h"
 
@@ -99,7 +100,21 @@ unsigned int resolve_symbol(Elf64_Sym *symbol_table, unsigned int symbol_table_s
 
 }
 
-void fgaslr_resolve(struct func *funcs) {
+void fgaslr_init(const char *parent, struct func *funcs) {
+
+#ifdef ENABLE_GRAPH
+	graph_init();
+#endif
+
+	fgaslr_resolve(parent, funcs);
+
+#ifdef ENABLE_GRAPH
+	graph_fini();
+#endif
+
+}
+
+void fgaslr_resolve(const char *parent, struct func *funcs) {
 
 	int c;
 	unsigned int i, si, ri, mi;
@@ -135,6 +150,10 @@ void fgaslr_resolve(struct func *funcs) {
 		function_str = funcstr[function_id];
 		library_id = GET_LIBID(funcs[i].id);
 		library_str = libstr[library_id];
+
+#ifdef ENABLE_GRAPH
+		graph_add(parent, function_str);
+#endif
 
 		c = cache_search(function_str);
 
@@ -361,7 +380,7 @@ void fgaslr_resolve(struct func *funcs) {
 			mappings = NULL;
 			num_mappings = 0;
 
-			fgaslr_resolve(next_funcs);
+			fgaslr_resolve(function_str, next_funcs);
 
 			mappings = my_mappings;
 			num_mappings = my_num_mappings;

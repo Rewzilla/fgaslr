@@ -29,6 +29,7 @@ struct func {
 #define MALIGN(x) (x + (0x1000 - (x % 0x1000)))
 
 void init();
-void fgaslr_resolve(struct func *funcs);
+void fgaslr_init(const char *parent, struct func *funcs);
+void fgaslr_resolve(const char *parent, struct func *funcs);
 
 #endif
