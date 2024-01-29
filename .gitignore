@@ -9,3 +9,5 @@ md5sum/*.o
 
 nc/*.bin
 nc/*.o
+
+graph_data.js

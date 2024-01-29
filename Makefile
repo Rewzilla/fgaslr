@@ -2,6 +2,12 @@
 export CC		:= gcc
 export CFLAGS	:= -fPIC -fno-jump-tables -Wall -fno-stack-protector
 
+# Enable debug build?
+#CFLAGS += -DENABLE_DEBUG
+
+# Enable call graph?
+#CFLAGS += -DENABLE_GRAPH
+
 .PHONY: all toy md5sum nc clean
 
 help:
