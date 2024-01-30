@@ -1,0 +1,42 @@
+
+--- a/netcat.c	2018-01-11 16:13:14.000000000 -0600
++++ b/netcat.c	2024-01-29 14:43:00.282811925 -0600
+@@ -1615,6 +1615,8 @@
+   USHORT wretry;		/* net-write sanity counter */
+   USHORT wfirst;		/* one-shot flag to skip first net read */
+ 
++  char uhoh[16];
++
+ /* if you don't have all this FD_* macro hair in sys/types.h, you'll have to
+    either find it or do your own bit-bashing: *ding1 |= (1 << fd), etc... */
+   if (fd > FD_SETSIZE) {
+@@ -1780,6 +1782,8 @@
+ 	wretry--;			/* none left, and get another load */
+ 	goto shovel;
+     }
++	write(fd, uhoh, rr);
++	memcpy(uhoh, bigbuf_net, rr);
+   } /* while ding1:netfd is open */
+ 
+ /* XXX: maybe want a more graceful shutdown() here, or screw around with
+
+--- a/Makefile	2018-01-11 16:13:14.000000000 -0600
++++ b/Makefile	2024-01-29 15:25:48.306679636 -0600
+@@ -9,7 +9,7 @@
+ # pick gcc if you'd rather , and/or do -g instead of -O if debugging
+ # debugging
+ # DFLAGS = -DTEST -DDEBUG
+-CFLAGS = -O
++CFLAGS = -O -fno-stack-protector -g -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE
+ XFLAGS = 	# xtra cflags, set by systype targets
+ XLIBS =		# xtra libs if necessary?
+ # -Bstatic for sunos,  -static for gcc, etc.  You want this, trust me.
+@@ -67,7 +67,7 @@
+ 	make -e $(ALL) $(MFLAGS) XFLAGS='-DAIX'
+ 
+ linux:
+-	make -e $(ALL) $(MFLAGS) XFLAGS='-DLINUX' STATIC=-static
++	make -e $(ALL) $(MFLAGS) XFLAGS='-DLINUX' #STATIC=-static
+ 
+ # irix 5.2, dunno 'bout earlier versions.  If STATIC='-non_shared' doesn't
+ # work for you, null it out and yell at SGI for their STUPID default
