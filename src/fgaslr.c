@@ -232,15 +232,21 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 				if (mapping == NULL)
 					continue;
 
+#ifdef ENABLE_NAMED_MAPPINGS
 				// This probably isn't the greatest, since each mapping will have a
 				// shadow copy in kernel space.  That said, this ensures each userspace
 				// mapping has a name in /proc/self/maps, which is really helpful for debugging
+				// Therefore, only enable if we need to debug the program, disable by default
 				map_name = malloc(strlen(function_str) + strlen(mapping->name) + 1);
 				sprintf(map_name, "%s%s", function_str, mapping->name);
 				memfd = memfd_create(map_name, 0);
 				ftruncate(memfd, MALIGN(mapping->size));
+				free(map_name);
 
 				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE, memfd, 0);
+#else
+				mapping->addr = mmap(addr, MALIGN(mapping->size), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
+#endif
 
 				// If this is the .bss segment, just initialize it to NULL
 				// otherwise, copy data from the binary image
@@ -251,8 +257,6 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 
 				addr += MALIGN(mapping->size);
 				fgaslr_debug("section '%s' mapped at %p\n", mapping->name, mapping->addr);
-
-				free(map_name);
 
 			}
 

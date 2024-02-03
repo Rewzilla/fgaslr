@@ -8,6 +8,9 @@ export CFLAGS	:= -fPIC -fno-jump-tables -Wall -fno-stack-protector
 # Enable call graph?
 #CFLAGS += -DENABLE_GRAPH
 
+# Enable named memory mappings?
+#CFLAGS += -DENABLE_NAMED_MAPPINGS
+
 .PHONY: all toy md5sum nc nc_orig clean
 
 help:

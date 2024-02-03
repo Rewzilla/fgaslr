@@ -1,7 +1,7 @@
 
 CFLAGS		+= -I./ -DENABLE_GRAPH \
 	-Wno-format-security -Wno-implicit-int -Wno-comment -Wno-unused-variable -Wno-return-type \
-	-fno-stack-protector -g -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE
+	-fno-stack-protector -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE
 
 all:
 
