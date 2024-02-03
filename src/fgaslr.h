@@ -16,8 +16,10 @@ struct func {
 	long int (*addr)();
 };
 
+#define fgaslr_error(...) printf("\e[31;1m[error]\e[0m " __VA_ARGS__)
+
 #ifdef ENABLE_DEBUG
-#define fgaslr_debug(...) if(getenv("DEBUG")) printf("\e[31m[debug]\e[0m " __VA_ARGS__)
+#define fgaslr_debug(...) if(getenv("DEBUG")) printf("\e[33;1m[debug]\e[0m " __VA_ARGS__)
 #else
 #define fgaslr_debug(...)
 #endif

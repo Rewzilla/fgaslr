@@ -33,7 +33,7 @@ void *resolve_in_library(const char *function_str, const char *library_str) {
 	h = dlopen(library_str, RTLD_LAZY);
 
 	if (h == NULL) {
-		fgaslr_debug("Error loading shared library '%s': %s\n", library_str, dlerror());
+		fgaslr_error("Error loading shared library '%s': %s\n", library_str, dlerror());
 		exit(-1);
 	} else {
 		fgaslr_debug("Opened shared library '%s' to resolve '%s'\n", library_str, function_str);
@@ -42,7 +42,7 @@ void *resolve_in_library(const char *function_str, const char *library_str) {
 	addr = dlsym(h, function_str);
 
 	if (addr == NULL) {
-		fgaslr_debug("Error locating '%s' in shared library '%s': %s\n", function_str, library_str, dlerror());
+		fgaslr_error("Error locating '%s' in shared library '%s': %s\n", function_str, library_str, dlerror());
 		exit(-1);
 	} else {
 		fgaslr_debug("Resolved '%s' to %p in '%s'\n", function_str, addr, library_str);
@@ -181,14 +181,14 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 			fd = open(filename, O_RDONLY);
 
 			if (fd < 0) {
-				fgaslr_debug("Failed to open '%s'\n", filename);
+				fgaslr_error("Failed to open '%s'\n", filename);
 				exit(-1);
 			}
 
 			object = mmap(NULL, MALIGN(filesize), PROT_READ, MAP_PRIVATE, fd, 0);
 
 			if (object < 0) {
-				fgaslr_debug("Failed to map '%s'\n", filename);
+				fgaslr_error("Failed to map '%s'\n", filename);
 				exit(-1);
 			}
 
@@ -339,7 +339,7 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 						break;
 
 					default:
-						fgaslr_debug("Unknown relocation type: %u\n", relocation_type);
+						fgaslr_error("Unknown relocation type: %u\n", relocation_type);
 
 					}
 
@@ -413,7 +413,7 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 
 		} else {
 
-			fgaslr_debug("Unknown library '%s' (%u)\n", library_str, library_id);
+			fgaslr_error("Unknown library '%s' (%u)\n", library_str, library_id);
 
 		}
 
