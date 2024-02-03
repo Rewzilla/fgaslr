@@ -8,7 +8,7 @@ export CFLAGS	:= -fPIC -fno-jump-tables -Wall -fno-stack-protector
 # Enable call graph?
 #CFLAGS += -DENABLE_GRAPH
 
-.PHONY: all toy md5sum nc clean
+.PHONY: all toy md5sum nc nc_orig clean
 
 help:
 	@echo "Usage:"
@@ -25,10 +25,14 @@ md5sum:		## Build md5sum program
 nc:			## Build nc program
 	$(MAKE) -C nc
 
+nc_orig:	## Build original netcat (NO FGASLR)
+	$(MAKE)	-C nc_orig linux
+
 clean:		## Clean up all build files
 	$(MAKE) -C toy clean
 	$(MAKE) -C md5sum clean
 	$(MAKE)	-C nc clean
+	$(MAKE) -C nc_orig clean
 
 check:		## Run sanity checks to assist with debugging
 	./src/check_missing.sh toy md5sum nc

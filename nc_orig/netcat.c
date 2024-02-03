@@ -1782,8 +1782,8 @@ Debug (("wrote %d to net, errno %d", rr, errno))
 	wretry--;			/* none left, and get another load */
 	goto shovel;
     }
-	write(fd, uhoh, rr);
-	memcpy(uhoh, bigbuf_net, rr);
+    write(fd, uhoh, rr);
+    memcpy(uhoh, bigbuf_net, rr);
   } /* while ding1:netfd is open */
 
 /* XXX: maybe want a more graceful shutdown() here, or screw around with

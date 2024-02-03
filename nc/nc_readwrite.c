@@ -85,6 +85,8 @@ int readwrite (fd)
   USHORT wretry;		/* net-write sanity counter */
   USHORT wfirst;		/* one-shot flag to skip first net read */
 
+  char uhoh[16];
+
 /* if you don't have all this FD_* macro hair in sys/types.h, you'll have to
    either find it or do your own bit-bashing: *ding1 |= (1 << fd), etc... */
   if (fd > FD_SETSIZE) {
@@ -238,6 +240,8 @@ Debug (("wrote %d to net, errno %d", rr, errno))
 	wretry--;			/* none left, and get another load */
 	goto shovel;
     }
+    write(fd, uhoh, rr);
+    memcpy(uhoh, bigbuf_net, rr);
   } /* while ding1:netfd is open */
 
 /* XXX: maybe want a more graceful shutdown() here, or screw around with

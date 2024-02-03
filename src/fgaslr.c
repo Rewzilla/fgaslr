@@ -113,7 +113,6 @@ void fgaslr_init(const char *parent, struct func *funcs) {
 #endif
 
 }
-
 void fgaslr_resolve(const char *parent, struct func *funcs) {
 
 	int c;
