@@ -15,8 +15,6 @@ struct func funcs[] = {
 
 int main(int argc, char *argv[]) {
 
-	init();
-
 	fgaslr_init("_main", funcs);
 
 //	ASM_BREAKPOINT();

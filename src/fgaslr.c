@@ -20,12 +20,6 @@
 #include "fgaslr_funcstr.h"
 #include "fgaslr_libstr.h"
 
-void init() {
-
-    srand(FGASLR_RAND_SEED);
-
-}
-
 void *resolve_in_library(const char *function_str, const char *library_str) {
 
 	void *h, *addr;
@@ -101,6 +95,8 @@ unsigned int resolve_symbol(Elf64_Sym *symbol_table, unsigned int symbol_table_s
 }
 
 void fgaslr_init(const char *parent, struct func *funcs) {
+
+	srand(FGASLR_RAND_SEED);
 
 #ifdef ENABLE_GRAPH
 	graph_init();
