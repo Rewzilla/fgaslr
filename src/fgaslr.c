@@ -116,7 +116,7 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 	unsigned int function_id, library_id;
 	const char *function_str, *library_str;
 	char *filename;
-	int filesize, fd, memfd;
+	int filesize, fd;
 	struct stat st;
 	void *object, *addr;
 	Elf64_Ehdr *elf_header;
@@ -133,7 +133,10 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 	struct mapping *mapping, *my_mappings;
 	unsigned int my_num_mappings;
 	struct func *next_funcs;
+#ifdef ENABLE_NAMED_MAPPINGS
+	int memfd;
 	char *map_name;
+#endif
 
 	const char *valid_sections[] = {
 		".lot", ".text", ".data", ".bss", ".rodata", ".rodata.str1.1", ".rodata.cst8"

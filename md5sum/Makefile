@@ -21,7 +21,7 @@ all:
 	$(CC) $(CFLAGS) $(LIBS) -c -o md5sum_nil.o md5sum_nil.c
 
 	$(CC) $(CFLAGS) $(LIBS) -g -o md5sum.bin md5sum.c \
-		../src/fgaslr.c -D'PROG_NAME="md5sum"' \
+		../src/fgaslr.c -D'PROG_NAME="md5sum"' ../src/start.c \
 		../src/cache.c ../src/mappings.c ../src/graph.c
 
 clean:

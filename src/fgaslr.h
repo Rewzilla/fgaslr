@@ -37,5 +37,8 @@ struct func {
 void init();
 void fgaslr_init(const char *parent, struct func *funcs);
 void fgaslr_resolve(const char *parent, struct func *funcs);
+void *build_start();
+
+#define run(a, b, c, d) ((void (*)(void *,int,char *[],char *[]))build_start())(a, b, c, d)
 
 #endif

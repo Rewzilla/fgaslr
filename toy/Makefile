@@ -9,7 +9,7 @@ all:
 	$(CC) $(CFLAGS) -c -o toy_div.o toy_div.c
 
 	$(CC) $(CFLAGS) -g -o toy.bin toy.c \
-		../src/fgaslr.c -D'PROG_NAME="toy"' \
+		../src/fgaslr.c -D'PROG_NAME="toy"' ../src/start.c \
 		../src/cache.c ../src/mappings.c ../src/graph.c
 
 clean:
