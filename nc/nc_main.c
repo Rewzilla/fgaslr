@@ -70,7 +70,6 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_SELF, FUNC_LOADPORTS), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_NEXTPORT), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_DOCONNECT), NULL},
-	{FGASLR_ENTRY(LIB_LIBC, FUNC_EXIT), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_INSAVED), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_CATCH), NULL},
 	{FGASLR_ENTRY(LIB_SELF, FUNC_UDPTEST), NULL},
@@ -145,17 +144,16 @@ struct func funcs[] = {
 #define loadports(a,b,c) ((void (*)(char *,USHORT,USHORT))funcs[58].addr)(a,b,c)
 #define nextport(a) ((USHORT (*)(char *))funcs[59].addr)(a)
 #define doconnect(a,b,c,d) ((int (*)(IA *,USHORT,IA *,USHORT))funcs[60].addr)(a,b,c,d)
-#define exit(a) ((void (*)(int))funcs[61].addr)(a)
-#define insaved (*(unsigned int *)funcs[62].addr)
-#define catch ((void (*)())funcs[63].addr)
-#define udptest(a,b) ((int (*)(int,IA *))funcs[64].addr)(a,b)
+#define insaved (*(unsigned int *)funcs[61].addr)
+#define catch ((void (*)())funcs[62].addr)
+#define udptest(a,b) ((int (*)(int,IA *))funcs[63].addr)(a,b)
 #undef stderr
-#define stderr (*(FILE **)funcs[65].addr)
-#define optarg (*(char **)funcs[66].addr)
-#define optind (*(int *)funcs[67].addr)
-#define optopt (*(int *)funcs[68].addr)
-#define srandom(a) ((void (*)(unsigned int))funcs[69].addr)(a)
-#define random(a) ((long (*)())funcs[70].addr)(a)
+#define stderr (*(FILE **)funcs[64].addr)
+#define optarg (*(char **)funcs[65].addr)
+#define optind (*(int *)funcs[66].addr)
+#define optopt (*(int *)funcs[67].addr)
+#define srandom(a) ((void (*)(unsigned int))funcs[68].addr)(a)
+#define random(a) ((long (*)())funcs[69].addr)(a)
 
 /* main :
    now we pull it all together... */

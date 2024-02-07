@@ -41,4 +41,11 @@ void *build_start();
 
 #define run(a, b, c, d) ((void (*)(void *,int,char *[],char *[]))build_start())(a, b, c, d)
 
+// exit() calls destructor handlers in libc, specifically _dl_fini() which
+// eventually tries to read from the original binary image mapping.  this
+// isn't compatible with -DENABLE_UNMAP_IMAGE, because that memory will already
+// have been unmapped, resulting in a crash.  solve this by redefining exit()
+// to just exit(), and nothing more.  this is sort of an ugly hack, but it works
+#define exit(a) __asm__( "movq $0x3c, %%rax; movq %0, %%rdi; syscall" : : "r"((long)a) : )
+
 #endif
