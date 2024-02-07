@@ -29,21 +29,26 @@ void *build_start() {
 		"push	%%rdx;"
 		"push	%%rcx;"
 
+// Seems like some functions in libc reference data in the original
+// binary image, which results in segfaults if it's fully unmapped
+
+/*
 		// munmap binary image
 		"mov	$0xb, %%rax;"
 		"mov	%%r15, %%rdi;"
 		"mov	$0x10000, %%rsi;"
 		"syscall;"
+*/
 
-// This may turn out to be a better method than fully unmapping, TBD
-/*
+// for now, just make it non-executable, which at least makes this
+// useless for code-reuse attacks
+
 		// mprotect read-only binary image
 		"mov	$0x0a, %%rax;"
 		"mov	%%r15, %%rdi;"
 		"mov	$0x10000, %%rsi;"
 		"mov	$0x3, %%rdx;"
 		"syscall;"
-*/
 
 		// call main(argc, argv, envp);
 		"pop	%%rdx;"

@@ -116,7 +116,7 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 	unsigned int function_id, library_id;
 	const char *function_str, *library_str;
 	char *filename;
-	int filesize, fd;
+	int filesize, fd, mapped_text;
 	struct stat st;
 	void *object, *addr;
 	Elf64_Ehdr *elf_header;
@@ -223,6 +223,7 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 			}
 
 			addr = generate_random_address();
+			mapped_text = 0;
 
 			for (mi=0; mi<(sizeof(valid_sections)/sizeof(char *)); mi++) {
 
@@ -230,6 +231,9 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 
 				if (mapping == NULL)
 					continue;
+
+				if (strcmp(mapping->name, ".text") == 0)
+					mapped_text = 1;
 
 #ifdef ENABLE_NAMED_MAPPINGS
 				// This probably isn't the greatest, since each mapping will have a
@@ -259,12 +263,24 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 
 			}
 
-			funcs_table_offset = resolve_symbol(symbol_table, symbol_table_size, string_table, "funcs");
-			fgaslr_debug("'funcs' offset is %x\n", funcs_table_offset);
+			// only fix up the GOT and .lot if we mapped a .text segment
+			if (mapped_text) {
 
-			fgaslr_debug("configuring fake GOT pointer for '%s'\n", function_str);
-			mapping = get_mapping_by_name(".lot");
-			*(long int *)(mapping->addr) = (long int)mapping->addr + funcs_table_offset;
+				funcs_table_offset = resolve_symbol(symbol_table, symbol_table_size, string_table, "funcs");
+				fgaslr_debug("'funcs' offset is %x\n", funcs_table_offset);
+
+				fgaslr_debug("configuring fake GOT pointer for '%s'\n", function_str);
+				mapping = get_mapping_by_name(".lot");
+				*(long int *)(mapping->addr) = (long int)mapping->addr + funcs_table_offset;
+
+			// otherwise just unmap the .lot, we don't need it
+			} else {
+
+				fgaslr_debug("%s doesn't have a .text, unmapping .lot\n", function_str);
+				mapping = get_mapping_by_name(".lot");
+				munmap(mapping->addr, MALIGN(mapping->size));
+
+			}
 
 			for (si=0; si<section_count; si++) {
 
@@ -372,22 +388,27 @@ void fgaslr_resolve(const char *parent, struct func *funcs) {
 			fgaslr_debug("Adding %s:%p to the cache\n", function_str, funcs[i].addr);
 			cache_add(function_str, funcs[i].addr);
 
-			fgaslr_debug("Recursively resolving functions in '%s'\n", function_str);
+			// iff we have a .lot and a .text, recursively resolve functions
+			if (mapped_text) {
 
-			next_funcs = (struct func *)(get_mapping_by_name(".lot")->addr + funcs_table_offset);
+				fgaslr_debug("Recursively resolving functions in '%s'\n", function_str);
 
-			my_mappings = mappings;
-			my_num_mappings = num_mappings;
+				next_funcs = (struct func *)(get_mapping_by_name(".lot")->addr + funcs_table_offset);
 
-			mappings = NULL;
-			num_mappings = 0;
+				my_mappings = mappings;
+				my_num_mappings = num_mappings;
 
-			fgaslr_resolve(function_str, next_funcs);
+				mappings = NULL;
+				num_mappings = 0;
 
-			mappings = my_mappings;
-			num_mappings = my_num_mappings;
+				fgaslr_resolve(function_str, next_funcs);
 
-			fgaslr_debug("Finished recursively resolving functions in '%s'\n", function_str);
+				mappings = my_mappings;
+				num_mappings = my_num_mappings;
+
+				fgaslr_debug("Finished recursively resolving functions in '%s'\n", function_str);
+
+			}
 
 			mapping = get_mapping_by_name(".lot");
 			if (mapping != NULL)

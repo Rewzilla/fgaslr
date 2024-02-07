@@ -3,7 +3,7 @@ export CC		:= gcc
 export CFLAGS	:= -fPIC -fno-jump-tables -Wall -fno-stack-protector -no-pie
 
 # Enable debug build?
-#CFLAGS += -DENABLE_DEBUG
+CFLAGS += -DENABLE_DEBUG
 
 # Enable call graph?
 #CFLAGS += -DENABLE_GRAPH
