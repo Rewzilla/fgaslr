@@ -9,7 +9,7 @@
 # pick gcc if you'd rather , and/or do -g instead of -O if debugging
 # debugging
 # DFLAGS = -DTEST -DDEBUG
-CFLAGS = -O -fno-stack-protector -g -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE
+CFLAGS = -O -fno-stack-protector -g -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE -Wno-format-security
 XFLAGS = 	# xtra cflags, set by systype targets
 XLIBS =		# xtra libs if necessary?
 # -Bstatic for sunos,  -static for gcc, etc.  You want this, trust me.
