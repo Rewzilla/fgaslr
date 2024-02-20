@@ -2,7 +2,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#define GRAPH_FILE "graph_data.js"
+#define GRAPH_FILE "./data/graph_data.js"
 
 void graph_init();
 void graph_fini();
