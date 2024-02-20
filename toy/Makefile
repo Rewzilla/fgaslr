@@ -1,5 +1,5 @@
 
-CFLAGS		+= -I./ -DENABLE_GRAPH
+CFLAGS		+= -I./
 
 all:
 
@@ -10,7 +10,7 @@ all:
 
 	$(CC) $(CFLAGS) -g -o toy.bin toy.c \
 		../src/fgaslr.c -D'PROG_NAME="toy"' ../src/start.c \
-		../src/cache.c ../src/mappings.c ../src/graph.c
+		../src/cache.c ../src/mappings.c ../src/graph.c ../src/stats.c
 
 clean:
 

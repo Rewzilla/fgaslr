@@ -69,7 +69,7 @@ all:
 
 	$(CC) $(CFLAGS) -g -o nc.bin nc.c \
 		../src/fgaslr.c -D'PROG_NAME="nc"' ../src/start.c \
-		../src/cache.c ../src/mappings.c ../src/graph.c
+		../src/cache.c ../src/mappings.c ../src/graph.c ../src/stats.c
 
 clean:
 

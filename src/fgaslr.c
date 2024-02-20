@@ -17,6 +17,8 @@
 #include "cache.h"
 #include "mappings.h"
 #include "graph.h"
+#include "stats.h"
+
 #include "fgaslr_funcstr.h"
 #include "fgaslr_libstr.h"
 
@@ -102,7 +104,16 @@ void fgaslr_init(const char *parent, struct func *funcs) {
 	graph_init();
 #endif
 
+#ifdef ENABLE_LOADTIME_STATS
+	timer_start();
+#endif
+
 	fgaslr_resolve(parent, funcs);
+
+#ifdef ENABLE_LOADTIME_STATS
+	timer_end();
+	loadtime_save();
+#endif
 
 #ifdef ENABLE_GRAPH
 	graph_fini();

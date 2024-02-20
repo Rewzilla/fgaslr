@@ -3,16 +3,25 @@ export CC		:= gcc
 export CFLAGS	:= -fPIC -fno-jump-tables -Wall -fno-stack-protector -no-pie
 
 # Enable debug build?
-CFLAGS += -DENABLE_DEBUG
+#CFLAGS += -DENABLE_DEBUG
 
 # Enable call graph?
-CFLAGS += -DENABLE_GRAPH
+#CFLAGS += -DENABLE_GRAPH
 
 # Enable named memory mappings?
-CFLAGS += -DENABLE_NAMED_MAPPINGS
+#CFLAGS += -DENABLE_NAMED_MAPPINGS
 
 # Enable unmapping of original binary image?
-CFLAGS += -DENABLE_UNMAP_IMAGE
+#CFLAGS += -DENABLE_UNMAP_IMAGE
+
+# Enable collection of load time statistics
+#CFLAGS += -DENABLE_LOADTIME_STATS
+
+# Enable collection of run time statistics
+#CFLAGS += -DENABLE_RUNTIME_STATS
+
+# Enable collection of memory usage statistics
+#CFLAGS += -DENABLE_MEMORY_STATS
 
 .PHONY: all toy toy_orig md5sum md5sum_orig nc nc_orig clean
 

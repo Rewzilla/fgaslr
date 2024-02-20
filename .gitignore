@@ -11,3 +11,5 @@ nc/*.bin
 nc/*.o
 
 graph_data.js
+loadtime.csv
+runtime.csv

@@ -1,7 +1,8 @@
 
 all:
 
-	$(CC) $(CFLAGS) -g -o toy.bin toy.c
+	$(CC) $(CFLAGS) -g -o toy.bin toy.c \
+		../src/stats.c
 
 clean:
 

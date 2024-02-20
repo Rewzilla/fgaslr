@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#include "../src/stats.h"
+
 typedef unsigned int uint;
 typedef unsigned char byte;
 extern int enc64(char*,byte*,int);
@@ -161,6 +164,10 @@ main(int argc, char **argv)
 	int c;
 	FILE *fd;
 
+#ifdef ENABLE_RUNTIME_STATS
+	timer_start();
+#endif
+
 	argv++; argc--;
 	if(argc>0 && strcmp(argv[0],"-d")==0){
 		debug++;
@@ -183,6 +190,12 @@ main(int argc, char **argv)
 		sum(fd, argv[c]);
 		fclose(fd);
 	}
+
+#ifdef ENABLE_RUNTIME_STATS
+	timer_end();
+	runtime_save();
+#endif
+
 }
 
 void

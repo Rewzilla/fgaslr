@@ -4,6 +4,7 @@
 #include "md5sum_types.h"
 
 #include "../src/fgaslr.h"
+#include "../src/stats.h"
 
 __attribute__((section(".lot")))
 struct func funcs[] = {
@@ -19,10 +20,19 @@ int main(int argc, char *argv[], char *envp[]) {
 
 //	ASM_BREAKPOINT();
 
+#ifdef ENABLE_RUNTIME_STATS
+	timer_start();
+#endif
+
 #ifdef ENABLE_UNMAP_IMAGE
 	run(funcs[0].addr, argc, argv, envp);
 #else
 	_main(argc, argv, envp);
+#endif
+
+#ifdef ENABLE_RUNTIME_STATS
+	timer_end();
+	runtime_save();
 #endif
 
 //	ASM_EXIT();

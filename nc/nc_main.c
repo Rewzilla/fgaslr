@@ -79,6 +79,9 @@ struct func funcs[] = {
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_OPTOPT), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_SRANDOM), NULL},
 	{FGASLR_ENTRY(LIB_LIBC, FUNC_RANDOM), NULL},
+#ifndef ENABLE_UNMAP_IMAGE
+	{FGASLR_ENTRY(LIB_LIBC, FUNC_EXIT), NULL},
+#endif
 	{FGASLR_ENTRY(LIB_END, FUNC_END), NULL},
 };
 
@@ -154,6 +157,9 @@ struct func funcs[] = {
 #define optopt (*(int *)funcs[67].addr)
 #define srandom(a) ((void (*)(unsigned int))funcs[68].addr)(a)
 #define random(a) ((long (*)())funcs[69].addr)(a)
+#ifndef ENABLE_UNMAP_IMAGE
+#define exit(a) ((void (*)(int))funcs[70].addr)(a)
+#endif
 
 /* main :
    now we pull it all together... */

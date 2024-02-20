@@ -4,7 +4,8 @@ CFLAGS		+= -Wno-char-subscripts -Wno-unused-function -Wno-unused-variable -Wno-m
 
 all:
 
-	$(CC) $(CFLAGS) $(LIBS) -g -o md5sum.bin md5sum.c
+	$(CC) $(CFLAGS) $(LIBS) -g -o md5sum.bin md5sum.c \
+		../src/stats.c
 
 clean:
 

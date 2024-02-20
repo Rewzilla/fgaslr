@@ -1,3 +1,5 @@
+#include "../src/stats.h"
+
 /* Netcat 1.10 RELEASE 960320
 
    A damn useful little "backend" utility begun 950915 or thereabouts,
@@ -1898,6 +1900,10 @@ main (argc, argv)
   USHORT curport = 0;
   char * randports = NULL;
 
+#ifdef ENABLE_RUNTIME_STATS
+	timer_start();
+#endif
+
 #ifdef HAVE_BIND
 /* can *you* say "cc -yaddayadda netcat.c -lresolv -l44bsd" on SunLOSs? */
   res_init();
@@ -2300,3 +2306,13 @@ Debug (("netfd %d from port %d to port %d", netfd, ourport, curport))
 } /* main */
 
 /* None genuine without this seal!  _H*/
+
+#ifdef ENABLE_RUNTIME_STATS
+void __attribute__((destructor)) fini() {
+
+	timer_end();
+	runtime_save();
+
+}
+#endif
+

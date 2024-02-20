@@ -9,12 +9,12 @@
 # pick gcc if you'd rather , and/or do -g instead of -O if debugging
 # debugging
 # DFLAGS = -DTEST -DDEBUG
-CFLAGS = -O -fno-stack-protector -g -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE -Wno-format-security
+CFLAGS += -O -fno-stack-protector -g -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE -Wno-format-security -Wno-maybe-uninitialized
 XFLAGS = 	# xtra cflags, set by systype targets
 XLIBS =		# xtra libs if necessary?
 # -Bstatic for sunos,  -static for gcc, etc.  You want this, trust me.
 STATIC =
-CC = cc $(CFLAGS)
+CC += $(CFLAGS)
 LD = $(CC)	# linker; defaults to unstripped executables
 o = o		# object extension
 
@@ -28,7 +28,7 @@ bogus:
 ### HARD TARGETS
 
 nc:	netcat.c
-	$(LD) $(DFLAGS) $(XFLAGS) $(STATIC) -o nc netcat.c $(XLIBS)
+	$(LD) $(DFLAGS) $(XFLAGS) $(STATIC) -o nc.bin netcat.c ../src/stats.c $(XLIBS)
 
 nc-dos:
 	@echo "DOS?!  Maybe someday, but not now"

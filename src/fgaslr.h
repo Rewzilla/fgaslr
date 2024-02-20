@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "stats.h"
+
 #include "fgaslr_funcid.h"
 #include "fgaslr_libid.h"
 
@@ -46,6 +48,8 @@ void *build_start();
 // isn't compatible with -DENABLE_UNMAP_IMAGE, because that memory will already
 // have been unmapped, resulting in a crash.  solve this by redefining exit()
 // to just exit(), and nothing more.  this is sort of an ugly hack, but it works
+#ifdef ENABLE_UNMAP_IMAGE
 #define exit(a) __asm__( "movq $0x3c, %%rax; movq %0, %%rdi; syscall" : : "r"((long)a) : )
+#endif
 
 #endif
