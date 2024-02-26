@@ -1,1 +1,1 @@
-var dot = "dinetwork {node[shape=circle]; start -> main; main -> add; main -> mul; main -> div; main -> printf; }";
+var dot = "dinetwork {node[shape=circle]; edge [color=gray]; start -> main ; start [color=#a10540] ; main [color=#813f94] ; main -> add ; main [color=#813f94] ; add [color=#0594e0] ; main -> mul ; main [color=#813f94] ; mul [color=#b1b4e8] ; main -> div ; main [color=#813f94] ; div [color=#83b2d0] ; main -> printf ; main [color=#813f94] ; printf [color=#d38400] ; }";
