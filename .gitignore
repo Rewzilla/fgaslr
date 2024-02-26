@@ -1,14 +1,8 @@
 
 TODO
 
-toy/*.bin
-toy/*.o
-
-md5sum/*.bin
-md5sum/*.o
-
-nc/*.bin
-nc/*.o
+*.bin
+*.o
 
 graph_data.js
 loadtime.csv
