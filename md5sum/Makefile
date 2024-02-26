@@ -1,5 +1,5 @@
 
-CFLAGS		+= -I./ -DENABLE_GRAPH
+CFLAGS		+= -I./
 
 # silence warnings from the project code itself, meh
 CFLAGS		+= -Wno-char-subscripts -Wno-unused-function -Wno-unused-variable

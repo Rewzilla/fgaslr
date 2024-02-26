@@ -1,5 +1,5 @@
 
-CFLAGS		+= -I./ -DENABLE_GRAPH \
+CFLAGS		+= -I./ \
 	-Wno-format-security -Wno-implicit-int -Wno-comment -Wno-unused-variable -Wno-return-type \
 	-fno-stack-protector -D_FORTIFY_SOURCE=0 -DGAPING_SECURITY_HOLE
 
