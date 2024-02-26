@@ -15,7 +15,7 @@ void graph_init() {
 		exit(-1);
 	}
 
-	fprintf(gfp, "var dot = \"dinetwork {node[shape=circle]; ");
+	fprintf(gfp, "var dot = \"dinetwork {node[shape=circle]; edge [color=gray]; ");
 
 }
 
