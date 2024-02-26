@@ -20,9 +20,6 @@ export CFLAGS	:= -fPIC -fno-jump-tables -Wall -fno-stack-protector -no-pie
 # Enable collection of run time statistics
 #CFLAGS += -DENABLE_RUNTIME_STATS
 
-# Enable collection of memory usage statistics
-#CFLAGS += -DENABLE_MEMORY_STATS
-
 .PHONY: all toy toy_orig md5sum md5sum_orig nc nc_orig clean
 
 help:
