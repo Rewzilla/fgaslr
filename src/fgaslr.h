@@ -14,7 +14,7 @@
 #define FGASLR_RAND_SEED 0
 
 struct func {
-	enum funcid id;
+	long id;
 	long int (*addr)();
 };
 
